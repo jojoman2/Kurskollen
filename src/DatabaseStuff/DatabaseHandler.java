@@ -39,6 +39,7 @@ public class DatabaseHandler {
         PreparedStatement selectStmt = conn.prepareStatement(selectQuery);
         selectStmt.setInt(1, userId);
         ResultSet result = selectStmt.executeQuery();
+        result.next();
         String activationCode = result.getString("activationcode");
 
         //Equals which stops any attacker from measuring the time taken to compare to figure out the activation code:
@@ -71,6 +72,7 @@ public class DatabaseHandler {
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1,email);
         ResultSet result = stmt.executeQuery();
+        result.next();
         String hashedPassword = result.getString("passwordhash");
         return BCrypt.checkpw(password,hashedPassword);
     }
@@ -105,6 +107,7 @@ public class DatabaseHandler {
                 " WHERE userid=?";
         PreparedStatement stmt = conn.prepareStatement(query);
         ResultSet result = stmt.executeQuery();
+        result.next();
         return new User(result.getString("name"),result.getString("email"));
 
     }
