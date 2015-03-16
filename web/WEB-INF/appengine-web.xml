@@ -3,4 +3,5 @@
     <application>kurskollenapp</application>
     <version>alpha-001</version>
     <threadsafe>true</threadsafe>
+    <use-google-connector-j>true</use-google-connector-j>
 </appengine-web-app>
