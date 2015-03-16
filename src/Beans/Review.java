@@ -1,3 +1,5 @@
+package Beans;
+
 import java.sql.Date;
 
 /**

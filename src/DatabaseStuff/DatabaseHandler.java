@@ -1,3 +1,7 @@
+package DatabaseStuff;
+
+import Beans.*;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +78,7 @@ public class DatabaseHandler {
                         " VALUES (?,?,?,?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, review.getRating() );
+        stmt.setInt(1, review.getRating());
 
 
     }

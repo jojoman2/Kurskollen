@@ -1,15 +1,18 @@
+package Beans;
+
 /**
  * Created by Fredrik on 2015-03-12.
  */
-public class Teacher {
+public class School {
 
     private String name;
 
-    public Teacher(String name) {
-        this.name = name;
+    public School(String name){
+
     }
 
     public String getName() {
         return name;
     }
+
 }
