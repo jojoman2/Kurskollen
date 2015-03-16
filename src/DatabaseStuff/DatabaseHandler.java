@@ -130,41 +130,124 @@ public class DatabaseHandler {
 
    //Course
 
-    public void addCourse(Course course){
+    public void addCourse(Course course) throws SQLException {
+        String query =  "INSERT INTO courses(coursecode, name, description, credits, online, link, schoolid)" +
+                        " VALUES(?,?,?,?,?,?,?)";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1,course.getCourseCode());
+        stmt.setString(2, course.getName());
+        stmt.setString(3, course.getDescription());
+        stmt.setFloat(4, course.getCredits());
+        stmt.setBoolean(5, course.isOnline());
+        stmt.setString(6, course.getLink());
+        stmt.setInt(7, course.getSchoolId());
+
+        stmt.executeUpdate();
+    }
+
+    public List<Course> searchForCourses(String name, int schoolid, int teacherId, boolean online) throws SQLException {
+        String query  ="SELECT * FROM courses WHERE" +
+                        " (name = ? or ? is null)" +
+                        " AND (schoolid = ? or ? is null)" +
+                        " AND (teacherid = ? or ? is null)" +
+                        " AND (online is ? or ? is null)";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, name);
+        stmt.setString(2, name);
+        stmt.setInt(3, schoolid);
+        stmt.setInt(4, schoolid);
+        stmt.setInt(5, teacherId);
+        stmt.setInt(6, teacherId);
+        stmt.setBoolean(7, online);
+
+        ResultSet results = stmt.executeQuery();
+
+        List<Course> courses = new ArrayList<Course>();
+        while(results.next()){
+            Course course = new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
+            courses.add(course);
+        }
+        return courses;
 
     }
 
-    public List<Course> searchForCourses(String name, int schoolid, int teacherId, boolean online){
-        return null;
-    }
+    public List<Course> getCoursesByTeacher(int teacherId) throws SQLException {
+        String query  = "SELECT * FROM courses" +
+                        " WHERE id = (SELECT courseid FROM teachesat WHERE teacherid = ?)";
 
-    public List<Course> getCoursesByTeacher(int teacherId){
-        return null;
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, teacherId);
+        ResultSet results = stmt.executeQuery();
+
+        List<Course> courses = new ArrayList<Course>();
+        while(results.next()){
+            Course course = new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
+            courses.add(course);
+        }
+        return courses;
+
     }
 
 
     //Bookmark
+    public void addBookmark(int course, int userId) throws SQLException {
+        String query = "INSERT INTO savedcourse(courseid, userid)"+
+                        " VALUES (?,?)";
 
-    public void addBookmark(int course, int userId){
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, course);
+        stmt.setInt(2, userId);
+        stmt.executeUpdate();
+
 
     }
 
-    public List<Course> listBookmarks(int userId){
-        return null;
+    public List<Course> listBookmarks(int userId) throws SQLException {
+        String query = "SELECT * FROM savedcourse" +
+                        " WHERE userid = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, userId);
+
+        ResultSet results = stmt.executeQuery();
+
+        List<Course> courses = new ArrayList<Course>();
+        while(results.next()){
+            Course course=  new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"),results.getBoolean("online"), results.getString("link"), results.getInt("schoolId"));
+            courses.add(course);
+        }
+        return courses;
+
+
     }
 
-    public void removeBookmark(int course, int userId){
+    public void remmoveBookmark(int course, int userId) throws SQLException {
+        String query = "DELETE FROM savedcourse" +
+                        " WHERE courseid = ? AND userid = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, course);
+        stmt.setInt(2, userId);
+        stmt.executeUpdate();
+
 
     }
 
     //Review
-
     public void addReview(int courseId, Review review) throws SQLException {
         String query = "INSERT INTO reviews(rating, text, userid, courseid, teacherid)" +
                         " VALUES (?,?,?,?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, review.getRating());
+        stmt.setString(2, review.getText());
+        stmt.setInt(3, review.getUserid());
+        stmt.setInt(4, review.getCourseid());
+        stmt.setInt(5, review.getTeacherid());
+
+        stmt.executeUpdate();
 
 
     }
