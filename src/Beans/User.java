@@ -7,9 +7,8 @@ public class User {
 
     private String name;
     private String email;
-    private String passwordHash;
 
-    public User(String name, String email,  String passwordHash){
+    public User(String name, String email){
 
     }
 
@@ -19,10 +18,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
     }
 
 
