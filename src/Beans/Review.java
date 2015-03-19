@@ -7,14 +7,14 @@ import java.sql.Date;
  */
 public class Review {
 
-    private Date time;
+    private long time;
     private int rating;
     private String text;
     private int userid;
     private int courseid;
     private int teacherid;
 
-    public Review(Date time, int rating, String text, int userid, int courseid, int teacherid) {
+    public Review(long time, int rating, String text, int userid, int courseid, int teacherid) {
         this.time = time;
         this.rating = rating;
         this.text = text;
@@ -32,7 +32,7 @@ public class Review {
         this.teacherid = teacherid;
     }
 
-    public Date getTime() {
+    public long getTime() {
         return time;
     }
 

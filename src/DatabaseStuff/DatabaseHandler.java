@@ -268,7 +268,7 @@ public class DatabaseHandler {
 
         List<Review> reviews = new ArrayList<Review>();
         while(results.next()){
-            Review review  = new Review(results.getDate("time"),results.getInt("rating"), results.getString("text"), results.getInt("userint"), results.getInt("courseid"), results.getInt("teacherid"));
+            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getInt("userint"), results.getInt("courseid"), results.getInt("teacherid"));
             reviews.add(review);
         }
         return reviews;
@@ -287,7 +287,7 @@ public class DatabaseHandler {
 
         List<Review> reviews = new ArrayList<Review>();
         while(results.next()){
-            Review review  = new Review(results.getDate("time"),results.getInt("rating"), results.getString("text"), results.getInt("userint"), results.getInt("courseid"), results.getInt("teacherid"));
+            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getInt("userint"), results.getInt("courseid"), results.getInt("teacherid"));
             reviews.add(review);
         }
         return reviews;
