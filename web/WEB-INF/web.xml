@@ -23,5 +23,13 @@
         <servlet-name>AddBookmark</servlet-name>
         <url-pattern>add-bookmark</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AddAccount</servlet-name>
+        <servlet-class>Servletts.AddAccount</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddAccount</servlet-name>
+        <url-pattern>add-account</url-pattern>
+    </servlet-mapping>
     
 </web-app>
