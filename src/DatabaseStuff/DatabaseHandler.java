@@ -153,8 +153,10 @@ public class DatabaseHandler {
         String query  ="SELECT * FROM courses WHERE" +
                         " (name = ? or ? is null)" +
                         " AND (schoolid = ? or ? is null)" +
-                        " AND (teacherid = ? or ? is null)" +
-                        " AND (online is ? or ? is null)";
+                        " AND (id IN " +
+                            " (SELECT courseid FROM teachesat WHERE teacherid IN " +
+                                " (SELECT id FROM teachers WHERE name LIKE '%?%')) or ? is null)" +
+                        " AND (online = ? or ? is null)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, name);
