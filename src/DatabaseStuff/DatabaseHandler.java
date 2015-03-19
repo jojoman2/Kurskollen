@@ -1,6 +1,6 @@
-package databaseStuff;
+package DatabaseStuff;
 
-import beans.*;
+import Beans.*;
 import org.mindrot.BCrypt;
 
 import java.sql.*;

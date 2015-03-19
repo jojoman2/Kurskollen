@@ -1,4 +1,4 @@
-package databaseStuff;
+package DatabaseStuff;
 
 import com.google.appengine.api.utils.SystemProperty;
 

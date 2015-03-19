@@ -1,4 +1,4 @@
-package servletts;
+package Servletts;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +14,7 @@ import java.io.IOException;
     Out:
         Json:
             boolean success
- */
+ asdasasd*/
 public class AddAccount extends HttpServlet {
 
     @Override
