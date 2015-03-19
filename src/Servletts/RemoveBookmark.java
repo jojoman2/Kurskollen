@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Created by fiona on 19/03/15.
@@ -19,9 +21,19 @@ public class RemoveBookmark extends HttpServlet{
 
 
         Connection conn = null;
-        PrintWriter = resp.getWriter();
+        PrintWriter writer = resp.getWriter();
 
-        conn= DatabaseStuff.DbConnect.getConnection();
-        DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
+        try {
+            conn= DatabaseStuff.DbConnect.getConnection();
+            DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
+
+            db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), Integer.parseInt(req.getParameter("userid")));
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }
