@@ -24,7 +24,7 @@ public class ErrorChecker {
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 
-    public boolean validate(final String hex) {
+    public static boolean validate(final String hex) {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(hex);
         return matcher.matches();

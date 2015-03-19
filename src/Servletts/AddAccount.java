@@ -33,18 +33,35 @@ public class AddAccount extends HttpServlet {
             conn = DatabaseStuff.DbConnect.getConnection();
             DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
 
+
             String email = null;
-            if (ErrorChecker.validate(req.getParameter("email"))){
+            String name = null;
+            Boolean addAccount =true;
+            String emailString = req.getParameter("email");
+            String nameString = req.getParameter("name");
+
+            if (!db.checkEmailUnique(emailString)){
+                addAccount = false;
+            }
+
+            if (ErrorChecker.validate(emailString)){
                 email = req.getParameter("email");
             }else{
-
+                addAccount = false;
             }
 
             //check name doesn't exist in db
-            if (name)
+            if (!db.checkNameUnique("name")){
+                addAccount = false;
+            }else{
+                name = req.getParameter("name");
+            }
+
+            //generate activation code
+
 
             try{
-                db.addUser(email, );
+                db.addUser(email, name, req.getParameter("password"),  );
             }catch(NumberFormatException e){
                 resp.setStatus(400);
             }
