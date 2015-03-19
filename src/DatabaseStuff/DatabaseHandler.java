@@ -41,11 +41,7 @@ public class DatabaseHandler {
         stmt.setString(1,email);
         ResultSet results = stmt.executeQuery();
         results.next();
-        if(results.getInt(1) == 1){
-            return false;
-        }else{
-            return true;
-        }
+        return results.getInt(1) == 1;
 
     }
 
@@ -59,11 +55,7 @@ public class DatabaseHandler {
         stmt.setString(1,name);
         ResultSet results = stmt.executeQuery();
         results.next();
-        if(results.getInt(1) == 1){
-            return false;
-        }else{
-            return true;
-        }
+        return results.getInt(1) == 1;
 
     }
 
