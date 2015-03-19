@@ -1,6 +1,7 @@
 package Servletts;
 
 import DatabaseStuff.DatabaseHandler;
+import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,6 +33,38 @@ public class AddAccount extends HttpServlet {
             conn = DatabaseStuff.DbConnect.getConnection();
             DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
 
+
+            String email = null;
+            String name = null;
+            Boolean addAccount =true;
+            String emailString = req.getParameter("email");
+            String nameString = req.getParameter("name");
+
+            if (!db.checkEmailUnique(emailString)){
+                addAccount = false;
+            }
+
+            if (ErrorChecker.validate(emailString)){
+                email = req.getParameter("email");
+            }else{
+                addAccount = false;
+            }
+
+            //check name doesn't exist in db
+            if (!db.checkNameUnique("name")){
+                addAccount = false;
+            }else{
+                name = req.getParameter("name");
+            }
+
+            //generate activation code
+
+
+            try{
+                db.addUser(email, name, req.getParameter("password"),  );
+            }catch(NumberFormatException e){
+                resp.setStatus(400);
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
