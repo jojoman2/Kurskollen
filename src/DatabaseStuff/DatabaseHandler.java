@@ -96,6 +96,7 @@ public class DatabaseHandler {
                     " WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,passwordHash);
+            stmt.setInt(2,userId);
             stmt.executeUpdate();
         }
     }
@@ -104,8 +105,10 @@ public class DatabaseHandler {
         String query =
                 "SELECT name,email" +
                 " FROM users"+
-                " WHERE userid=?";
+                " WHERE id=?";
+
         PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1,userid);
         ResultSet result = stmt.executeQuery();
         result.next();
         return new User(result.getString("name"),result.getString("email"));
@@ -149,22 +152,31 @@ public class DatabaseHandler {
         stmt.executeUpdate();
     }
 
-    public List<Course> searchForCourses(String name, int schoolid, int teacherId, boolean online) throws SQLException {
+    public List<Course> searchForCourses(String name, int schoolid, String teacherName, boolean online) throws SQLException {
         String query  ="SELECT * FROM courses WHERE" +
-                        " (name = ? or ? is null)" +
-                        " AND (schoolid = ? or ? is null)" +
+                        " (name LIKE ? or ? is null)" +
+                        " AND (schoolid = ? or ?=-1)" +
                         " AND (id IN " +
                             " (SELECT courseid FROM teachesat WHERE teacherid IN " +
-                                " (SELECT id FROM teachers WHERE name LIKE '%?%')) or ? is null)" +
-                        " AND (online = ? or ? is null)";
-
+                                " (SELECT id FROM teachers WHERE name LIKE ?)) or ? is null)" +
+                        " AND (online = ?)";
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, name);
+        if(name!=null) {
+            stmt.setString(1, '%' + name + '%');
+        }
+        else{
+            stmt.setString(1,null);
+        }
         stmt.setString(2, name);
         stmt.setInt(3, schoolid);
         stmt.setInt(4, schoolid);
-        stmt.setInt(5, teacherId);
-        stmt.setInt(6, teacherId);
+        if(teacherName!=null) {
+            stmt.setString(5, '%' + teacherName + '%');
+        }
+        else{
+            stmt.setString(5, null);
+        }
+        stmt.setString(6, teacherName);
         stmt.setBoolean(7, online);
 
         ResultSet results = stmt.executeQuery();
@@ -248,7 +260,7 @@ public class DatabaseHandler {
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, review.getRating());
         stmt.setString(2, review.getText());
-        stmt.setInt(3, review.getUserid());
+        stmt.setInt(3, courseId);
         stmt.setInt(4, review.getCourseid());
         stmt.setInt(5, review.getTeacherid());
 
