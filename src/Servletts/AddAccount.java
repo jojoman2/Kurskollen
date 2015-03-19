@@ -6,9 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Created by Fredrik on 2015-03-19.
- */
+/*
+    In parameters:
+        Email
+        Username
+        Password
+    Out:
+        Json:
+            boolean success
+ asdasasd*/
 public class AddAccount extends HttpServlet {
 
     @Override
