@@ -29,18 +29,10 @@ public class TestServlett extends HttpServlet{
             PrintWriter writer = response.getWriter();
             Connection conn = DbConnect.getConnection();
             DatabaseHandler db = new DatabaseHandler(conn);
-            //db.addUser("hej@hej.com","Arne","kalleanka","hsjdh4dh6");
-            //writer.print(db.activateUser(3, "sjdfksjdf"));
-            //writer.print(db.activateUser(3,"hsjdh4dh6"));
-            //writer.print(db.checkUser("hej@hej.com","kalleanka"));
-            //db.changeUserDetails(1,null,"kalleanka");
-            //writer.println(db.checkUser("fredde_wallen@hotmail.com","kalleanka"));
-            /*List<School> schools = db.getSchools();
-            for(School school : schools){
-                writer.println(school.getName());
-            }*/
+
+            //db.addBookmark(2,2);
             //db.addCourse(new Course("DD2385","Programutvecklingsteknik","En fortsättningskurs i datalogi",6,false,"www.kth.se/student/kurser/kurs/DD2385?l=sv",1));
-            List<Course> courses = db.searchForCourses("interak",1,"Ste",false);
+            List<Course> courses = db.listBookmarks(2);
             for(Course course : courses){
                 writer.println(course.getName());
             }
