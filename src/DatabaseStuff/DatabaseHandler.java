@@ -222,8 +222,8 @@ public class DatabaseHandler {
     }
 
     public List<Course> listBookmarks(int userId) throws SQLException {
-        String query = "SELECT * FROM savedcourse" +
-                        " WHERE userid = ?";
+        String query = "SELECT * FROM courses WHERE id = (SELECT courseid FROM savedcourse" +
+                        " WHERE userid = ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, userId);
