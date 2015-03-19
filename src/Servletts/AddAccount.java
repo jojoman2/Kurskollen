@@ -64,13 +64,11 @@ public class AddAccount extends HttpServlet {
             String activationCode = General.randomString(25);
 
 
+            if(addAccount) {
+                    db.addUser(email, name, req.getParameter("password"), activationCode);
+                    EmailSender.sendEmail(email, name, activationCode);
 
-            try{
-                db.addUser(email, name, req.getParameter("password"), activationCode);
-
-                EmailSender.sendEmail(email, name, activationCode);
-
-            }catch(NumberFormatException e){
+            }else{
                 resp.setStatus(400);
             }
 
