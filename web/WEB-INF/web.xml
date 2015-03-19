@@ -1,10 +1,19 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
     <servlet>
-        <servlet-name>The servlett </servlet-name>
+        <servlet-name>The servlett</servlet-name>
         <servlet-class>Servletts.TestServlett</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>The servlett</servlet-name>
         <url-pattern>index</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SearchForCourse</servlet-name>
+        <servlet-class>Servletts.SearchForCourse</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchForCourse</servlet-name>
+        <url-pattern>search-course</url-pattern>
+    </servlet-mapping>
+    
 </web-app>

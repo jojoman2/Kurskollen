@@ -1,6 +1,8 @@
 package Servletts;
 
 import Beans.Course;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,16 +35,16 @@ public class SearchForCourse extends HttpServlet {
 
 
             List<Course> courses = db.searchForCourses(req.getParameter("name"), Integer.parseInt(req.getParameter("schoolid")), req.getParameter("teacherName"), req.getParameter("online").equals("1"));
-
-            JSONArray list = new JSONArray(courses);
+            JSONArray courseJson = new JSONArray();
+            for(Course course : courses) {
+                courseJson.put(new JSONObject(course));
+            }
+            writer.print(courseJson.toString());
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (Exception e) {
-            resp.setStatus(500);
-            writer.println("Nåt är fel");
         }
 
     }
