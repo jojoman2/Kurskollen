@@ -1,11 +1,8 @@
-package Servletts;
+package servletts;
 
-import Beans.Course;
-import Beans.School;
-import Beans.User;
-import DatabaseStuff.DatabaseHandler;
-import DatabaseStuff.DbConnect;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import beans.*;
+import databaseStuff.DatabaseHandler;
+import databaseStuff.DbConnect;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -30,11 +26,11 @@ public class TestServlett extends HttpServlet{
             Connection conn = DbConnect.getConnection();
             DatabaseHandler db = new DatabaseHandler(conn);
 
-            //db.addBookmark(2,2);
-            //db.addCourse(new Course("DD2385","Programutvecklingsteknik","En fortsättningskurs i datalogi",6,false,"www.kth.se/student/kurser/kurs/DD2385?l=sv",1));
-            List<Course> courses = db.listBookmarks(2);
-            for(Course course : courses){
-                writer.println(course.getName());
+
+            //db.addReview(new Review(System.currentTimeMillis() / 1000L,3,"Lite sådär tyckte jag",1,1,1));
+            List<Teacher> teachers = db.getTeachersByStartingString("Jar");
+            for(Teacher teacher : teachers){
+                writer.println(teacher.getName());
             }
 
         } catch (ClassNotFoundException e) {

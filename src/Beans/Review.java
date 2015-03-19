@@ -1,6 +1,4 @@
-package Beans;
-
-import java.sql.Date;
+package beans;
 
 /**
  * Created by Fredrik on 2015-03-12.
@@ -16,15 +14,6 @@ public class Review {
 
     public Review(long time, int rating, String text, int userid, int courseid, int teacherid) {
         this.time = time;
-        this.rating = rating;
-        this.text = text;
-        this.userid = userid;
-        this.courseid = courseid;
-        this.teacherid = teacherid;
-    }
-
-    public Review(int rating, String text, int userid, int courseid, int teacherid) {
-
         this.rating = rating;
         this.text = text;
         this.userid = userid;
