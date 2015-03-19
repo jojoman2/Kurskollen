@@ -2,6 +2,7 @@ package Servletts;
 
 import DatabaseStuff.DatabaseHandler;
 import utils.ErrorChecker;
+import utils.General;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Random;
 
 /*
     In parameters:
@@ -58,10 +60,11 @@ public class AddAccount extends HttpServlet {
             }
 
             //generate activation code
+            String activationCode = General.randomString(25);
 
 
             try{
-                db.addUser(email, name, req.getParameter("password"),  );
+                db.addUser(email, name, req.getParameter("password"), activationCode  );
             }catch(NumberFormatException e){
                 resp.setStatus(400);
             }
