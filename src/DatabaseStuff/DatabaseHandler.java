@@ -1,8 +1,9 @@
 package DatabaseStuff;
 
-import Beans.*;
+import beans.*;
 import org.mindrot.BCrypt;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,38 @@ public class DatabaseHandler {
         ResultSet result = stmt.executeQuery();
         result.next();
         return new User(result.getString("name"),result.getString("email"));
+
+    }
+
+    //Checks if user loginsession equals login session
+    public boolean checkLoginSession(int userId, String loginSession) throws SQLException {
+        String query =
+                "SELECT loginsession FROM users" +
+                " WHERE id=?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, userId);
+
+        ResultSet result =stmt.executeQuery();
+        result.next();
+
+        return loginSession.equals(result.getString("loginsession"));
+    }
+
+
+    //lägga in loginsessionide
+    public void updateLoginSession(int userId, String loginSession) throws SQLException {
+        String query =
+                "UPDATE users"+
+                " SET loginsession = ?"+
+                " WHERE userid = ?";
+
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, loginSession);
+        stmt.setInt(2,userId);
+        stmt.executeUpdate();
+
 
     }
 
