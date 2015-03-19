@@ -1,8 +1,8 @@
-package servletts;
+package Servletts;
 
-import beans.*;
-import databaseStuff.DatabaseHandler;
-import databaseStuff.DbConnect;
+import Beans.*;
+import DatabaseStuff.DatabaseHandler;
+import DatabaseStuff.DbConnect;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

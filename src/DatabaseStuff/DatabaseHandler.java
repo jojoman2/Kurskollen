@@ -1,6 +1,6 @@
-package databaseStuff;
+package DatabaseStuff;
 
-import beans.*;
+import Beans.*;
 import org.mindrot.BCrypt;
 
 import java.sql.*;
@@ -360,7 +360,7 @@ public class DatabaseHandler {
                 " VALUES(?,?)";
         PreparedStatement stmt2 = conn.prepareStatement(query2);
         stmt2.setInt(1,courseid);
-        stmt2.setInt(2,id);
+        stmt2.setInt(2, id);
         stmt2.executeUpdate();
     }
 
