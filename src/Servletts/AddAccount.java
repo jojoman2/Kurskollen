@@ -61,7 +61,7 @@ public class AddAccount extends HttpServlet {
             }
 
             //generate activation code
-            String activationCode = General.randomString(25);
+            String activationCode = General.randomString(20);
 
 
 
