@@ -15,5 +15,13 @@
         <servlet-name>SearchForCourse</servlet-name>
         <url-pattern>search-course</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AddBookmark</servlet-name>
+        <servlet-class>Servletts.AddBookmark</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddBookmark</servlet-name>
+        <url-pattern>add-bookmark</url-pattern>
+    </servlet-mapping>
     
 </web-app>

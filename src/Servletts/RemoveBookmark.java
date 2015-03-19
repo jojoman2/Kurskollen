@@ -27,7 +27,14 @@ public class RemoveBookmark extends HttpServlet{
             conn= DatabaseStuff.DbConnect.getConnection();
             DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
 
-            db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), Integer.parseInt(req.getParameter("userid")));
+            try{
+                db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), Integer.parseInt(req.getParameter("userid")));
+            }
+            catch(NumberFormatException e){
+                resp.setStatus(400);
+            }
+
+
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

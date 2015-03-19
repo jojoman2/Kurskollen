@@ -32,7 +32,6 @@ public class AddAccount extends HttpServlet {
             conn = DatabaseStuff.DbConnect.getConnection();
             DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
 
-            db.addUser()
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

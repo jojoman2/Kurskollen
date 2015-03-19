@@ -41,7 +41,9 @@ public class SearchForCourse extends HttpServlet {
             }
 
 
-            List<Course> courses = db.searchForCourses(req.getParameter("name"), schoolid , teacherName, req.getParameter("online").equals("1"));
+
+
+            List<Course> courses = db.searchForCourses(req.getParameter("name"), schoolid , req.getParameter("teacher"), req.getParameter("online").equals("1"));
             JSONArray courseJson = new JSONArray();
             for(Course course : courses) {
                 courseJson.put(new JSONObject(course));
