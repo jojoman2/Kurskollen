@@ -38,27 +38,19 @@ public class AddAccount extends HttpServlet {
 
 
             String email = null;
-            String name = null;
+            String name;
             Boolean addAccount =true;
             String emailString = req.getParameter("email");
-            String nameString = req.getParameter("name");
-
-            if (!db.checkEmailUnique(emailString)){
-                addAccount = false;
-            }
 
             if (ErrorChecker.validate(emailString)){
                 email = req.getParameter("email");
             }else{
                 addAccount = false;
+                writer.print("HEEEJ2");
             }
 
-            //check name doesn't exist in db
-            if (!db.checkNameUnique("name")){
-                addAccount = false;
-            }else{
-                name = req.getParameter("name");
-            }
+            name = req.getParameter("name");
+
 
             //generate activation code
             String activationCode = General.randomString(20);
@@ -76,7 +68,14 @@ public class AddAccount extends HttpServlet {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getErrorCode()==1062){
+                resp.setStatus(400);
+            }
+            else{
+                resp.setStatus(500);
+                e.printStackTrace();
+            }
+
         }
 
     }
