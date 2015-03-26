@@ -30,7 +30,11 @@ public class AddCourse extends HttpServlet {
             String schoolIdString = req.getParameter("schoolid");
             int schoolid = Integer.parseInt("schoolid");
 
-            Course course =  new Course(req.getParameter("coursecode"), req.getParameter("name"), req.getParameter("description"), credits, )
+
+            String onlineString = req.getParameter("online");
+            boolean online = onlineString.equals("1");
+
+            Course course =  new Course(req.getParameter("coursecode"), req.getParameter("name"), req.getParameter("description"), credits, online, req.getParameter("link"), schoolid);
             db.addCourse(course);
 
 
