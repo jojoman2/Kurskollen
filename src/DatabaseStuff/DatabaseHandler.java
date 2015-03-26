@@ -131,6 +131,10 @@ public class DatabaseHandler {
         ResultSet result =stmt.executeQuery();
         result.next();
 
+        if(result.getFetchSize()!=1){
+            return false;
+        }
+
         String storedLogin = result.getString("loginsession");
 
         //Compares in a way which avoids attacks measuring comparation time

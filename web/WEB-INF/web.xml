@@ -3,33 +3,47 @@
         <servlet-name>The servlett</servlet-name>
         <servlet-class>Servletts.TestServlett</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>The servlett</servlet-name>
-        <url-pattern>index</url-pattern>
-    </servlet-mapping>
     <servlet>
         <servlet-name>SearchForCourse</servlet-name>
         <servlet-class>Servletts.SearchForCourse</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>SearchForCourse</servlet-name>
-        <url-pattern>search-course</url-pattern>
-    </servlet-mapping>
     <servlet>
         <servlet-name>AddBookmark</servlet-name>
         <servlet-class>Servletts.AddBookmark</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>AddBookmark</servlet-name>
-        <url-pattern>add-bookmark</url-pattern>
-    </servlet-mapping>
     <servlet>
         <servlet-name>AddAccount</servlet-name>
         <servlet-class>Servletts.AddAccount</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateReview</servlet-name>
+        <servlet-class>Servletts.CreateReview</servlet-class>
+    </servlet>
+    
+    
+    <servlet-mapping>
+        <servlet-name>The servlett</servlet-name>
+        <url-pattern>index</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>SearchForCourse</servlet-name>
+        <url-pattern>search-course</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AddBookmark</servlet-name>
+        <url-pattern>add-bookmark</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>AddAccount</servlet-name>
         <url-pattern>add-account</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>CreateReview</servlet-name>
+        <url-pattern>create-review</url-pattern>
     </servlet-mapping>
     
 </web-app>
