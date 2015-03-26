@@ -32,10 +32,8 @@ public class GetCoursereviews extends HttpServlet {
             DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
             String courseIdString = req.getParameter("courseid");
-            int courseid = -1;
-            if (courseIdString != null){
-                courseid = Integer.parseInt(courseIdString);
-            }
+            int courseid = Integer.parseInt(courseIdString);
+
 
             List<Review> reviews = db.getReviewsByCourse(courseid);
             JSONArray reviewsJson =  new JSONArray();
@@ -48,6 +46,8 @@ public class GetCoursereviews extends HttpServlet {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NumberFormatException e){
+            resp.setStatus(400);
         }
 
 
