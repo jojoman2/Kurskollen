@@ -122,16 +122,12 @@ public class DatabaseHandler {
     public boolean checkLoginSession(String email, String loginSession) throws SQLException {
         String query =
                 "SELECT loginsession FROM users"+
-                " WHERE email=?" +
-                " LIMIT 1";
-
+                " WHERE email=?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, email);
 
         ResultSet result =stmt.executeQuery();
-        result.next();
-
-        if(result.getFetchSize()!=1){
+        if(!result.next()){
             return false;
         }
 
