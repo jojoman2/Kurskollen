@@ -58,11 +58,25 @@ public class DatabaseHandler {
                 " SET activated=1, activationcode = NULL" +
                 " WHERE email=?";
         PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
-        updateStmt.setString(1,userEmail);
+        updateStmt.setString(1, userEmail);
         updateStmt.executeUpdate();
         return true;
 
     }
+
+    public boolean isActivated(String email) throws SQLException {
+        String query =  "SELECT activated FROM users" +
+                " WHERE email = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, email);
+        ResultSet result = stmt.executeQuery();
+
+        return result.getBoolean("activated");
+
+
+    }
+
 
     public boolean checkUser(String email, String password) throws SQLException {
         String query =
@@ -89,7 +103,7 @@ public class DatabaseHandler {
                     " WHERE email=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,newName);
-            stmt.setString(2,email);
+            stmt.setString(2, email);
             stmt.executeUpdate();
         }
         if(newPassword!=null){
@@ -100,7 +114,7 @@ public class DatabaseHandler {
                     " WHERE email=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,passwordHash);
-            stmt.setString(2,email);
+            stmt.setString(2, email);
             stmt.executeUpdate();
         }
     }
@@ -112,7 +126,7 @@ public class DatabaseHandler {
                 " WHERE email=?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1,email);
+        stmt.setString(1, email);
         ResultSet result = stmt.executeQuery();
         result.next();
         return new User(result.getString("name"),email);
@@ -157,7 +171,7 @@ public class DatabaseHandler {
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, loginSession);
-        stmt.setString(2,email);
+        stmt.setString(2, email);
         stmt.executeUpdate();
 
 
