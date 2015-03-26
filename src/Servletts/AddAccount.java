@@ -19,66 +19,67 @@ import java.sql.SQLException;
     In parameters:
         Email
         Username
-        Password
-    Out:
-        Json:
-            boolean success
- asdasasd*/
+        Password*/
 public class AddAccount extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Connection conn =  null;
-        PrintWriter writer = resp.getWriter();
+        if (!ErrorChecker.checkParameters(req, new String[]{"email", "name", "password"})) {
+            resp.setStatus(400);
+        }
+        else {
 
-        try {
-            conn = DatabaseStuff.DbConnect.getConnection();
-            DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
+            Connection conn = null;
+            PrintWriter writer = resp.getWriter();
 
-
-            String email = null;
-            String name;
-            Boolean addAccount =true;
-            String emailString = req.getParameter("email");
-
-            if (ErrorChecker.validateEmail(emailString)){
-                email = req.getParameter("email");
-            }else{
-                addAccount = false;
-                writer.print("HEEEJ2");
-            }
-
-            name = req.getParameter("name");
+            try {
+                conn = DatabaseStuff.DbConnect.getConnection();
+                DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
 
 
-            //generate activation code
-            String activationCode = General.randomString(20);
+                String email = null;
+                String name;
+                Boolean addAccount = true;
+                String emailString = req.getParameter("email");
+
+                if (ErrorChecker.validateEmail(emailString)) {
+                    email = req.getParameter("email");
+                } else {
+                    addAccount = false;
+                    writer.print("HEEEJ2");
+                }
+
+                name = req.getParameter("name");
 
 
-            if(addAccount) {
+                //generate activation code
+                String activationCode = General.randomString(20);
+
+
+                if (addAccount) {
                     db.addUser(email, name, req.getParameter("password"), activationCode);
                     EmailSender.sendEmail(email, name, activationCode);
                     resp.setStatus(201);
 
-            }else{
-                resp.setStatus(400);
-            }
+                } else {
+                    resp.setStatus(400);
+                }
 
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            if(e.getErrorCode()==1062){
-                writer.println("Username or email already exists");
-                resp.setStatus(400);
-            }
-            else{
-                resp.setStatus(500);
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+            } catch (SQLException e) {
+                if (e.getErrorCode() == 1062) {
+                    writer.println("Username or email already exists");
+                    resp.setStatus(400);
+                } else {
+                    resp.setStatus(500);
+                    e.printStackTrace();
+                }
+
             }
 
         }
-
     }
 }
