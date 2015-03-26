@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-public class GetTeacherInfo extends HttpServlet {
+public class getTeacherInfo extends HttpServlet {
 
     //TEST ME PLZ!!!!!
 
@@ -34,10 +34,8 @@ public class GetTeacherInfo extends HttpServlet {
             DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
             String teacherIdString = req.getParameter("teacherid");
-            int teacherid = -1;
-            if (teacherIdString != null){
-                teacherid = Integer.parseInt(teacherIdString);
-            }
+            int teacherid = Integer.parseInt(teacherIdString);
+
 
             Teacher teacher = db.getTeacherById(teacherid);
             List<Course> courses = db.getCoursesByTeacher(teacherid);
@@ -59,6 +57,8 @@ public class GetTeacherInfo extends HttpServlet {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (NumberFormatException e){
+            resp.setStatus(400);
         }
 
     }
