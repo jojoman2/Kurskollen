@@ -59,6 +59,7 @@ public class AddAccount extends HttpServlet {
             if(addAccount) {
                     db.addUser(email, name, req.getParameter("password"), activationCode);
                     EmailSender.sendEmail(email, name, activationCode);
+                    resp.setStatus(201);
 
             }else{
                 resp.setStatus(400);

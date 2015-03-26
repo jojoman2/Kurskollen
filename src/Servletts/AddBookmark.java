@@ -27,7 +27,6 @@ public class AddBookmark extends HttpServlet {
 
         if (!ErrorChecker.checkParameters(req, new String[]{"email", "loginsession", "courseid"})) {
             resp.setStatus(400);
-            writer.print("parameters");
         } else {
 
             String email = req.getParameter("email");
@@ -39,14 +38,14 @@ public class AddBookmark extends HttpServlet {
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
                 if(!db.checkLoginSession(email, loginSession)){
                     resp.setStatus(401);
-                    writer.print("login");
                 }
                 else {
                     try {
                         int couseid = Integer.parseInt(req.getParameter("courseid"));
                         db.addBookmark(couseid, email);
+                        resp.setStatus(201);
                     } catch (NumberFormatException e) {
-                        throw(e);
+                        resp.setStatus(400);
                     }
                 }
 
