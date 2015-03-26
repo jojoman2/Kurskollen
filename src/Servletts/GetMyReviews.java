@@ -3,6 +3,7 @@ package Servletts;
 import Beans.Review;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,27 +23,30 @@ public class GetMyReviews extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        PrintWriter writer = resp.getWriter();
+        if (!ErrorChecker.checkParameters(req, new String[]{"userEmail"})) {
+            resp.setStatus(400);
+        } else {
+            PrintWriter writer = resp.getWriter();
 
-        try {
-            Connection conn  = DatabaseStuff.DbConnect.getConnection();
-            DatabaseStuff.DatabaseHandler db  = new DatabaseStuff.DatabaseHandler(conn);
+            try {
+                Connection conn = DatabaseStuff.DbConnect.getConnection();
+                DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-            String userEmail =  req.getParameter("userEmail");
+                String userEmail = req.getParameter("userEmail");
 
-            List<Review> reviews = db.getReviewsByUser(userEmail);
-            JSONArray reviewsJson = new JSONArray();
-            for (Review review: reviews){
-                reviewsJson.put(new JSONObject(review));
+                List<Review> reviews = db.getReviewsByUser(userEmail);
+                JSONArray reviewsJson = new JSONArray();
+                for (Review review : reviews) {
+                    reviewsJson.put(new JSONObject(review));
+                }
+
+                writer.print(reviewsJson.toString());
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-            writer.print(reviewsJson.toString());
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
     }
 }
