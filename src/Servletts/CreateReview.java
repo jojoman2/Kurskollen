@@ -20,8 +20,6 @@ public class CreateReview extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        PrintWriter writer = resp.getWriter();
-
         if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","rating", "courseid","teacherid","text"})) {
             resp.setStatus(400);
         } else {
@@ -30,7 +28,7 @@ public class CreateReview extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String email = req.getParameter("useremail");
+                String email = req.getParameter("email");
                 String loginSession = req.getParameter("loginsession");
 
                 if(!db.checkLoginSession(email, loginSession)){
@@ -61,7 +59,7 @@ public class CreateReview extends HttpServlet {
                 e.printStackTrace();
             } catch (SQLException e) {
                 e.printStackTrace();
-                resp.setStatus(422);
+                resp.setStatus(400);
             } catch (NumberFormatException e){
                 resp.setStatus(400);
             }
