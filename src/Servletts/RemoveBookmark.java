@@ -21,7 +21,7 @@ public class RemoveBookmark extends HttpServlet{
 
 
         Connection conn = null;
-        PrintWriter writer = resp.getWriter();
+
 
         try {
             conn= DatabaseStuff.DbConnect.getConnection();

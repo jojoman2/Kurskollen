@@ -417,5 +417,17 @@ public class DatabaseHandler {
 
     }
 
+    public Teacher getTeacherById(int id) throws SQLException{
+        String query = "SELECT * FROM teachers" +
+                " WHERE id=?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, id);
+        ResultSet result = stmt.executeQuery();
+        Teacher teacher = new Teacher(result.getInt("id"), result.getString("name"));
+
+        return teacher;
+    }
+
 
 }

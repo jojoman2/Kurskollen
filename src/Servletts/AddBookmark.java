@@ -22,7 +22,7 @@ public class AddBookmark extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Connection conn = null;
+        Connection conn;
         PrintWriter writer = resp.getWriter();
 
         if (ErrorChecker.checkParameters(req, new String[]{"email", "loginsessions", "courseid", "userid"})) {
