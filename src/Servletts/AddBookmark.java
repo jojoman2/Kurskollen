@@ -1,5 +1,7 @@
 package Servletts;
 
+import utils.ErrorChecker;
+
 import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,34 +23,34 @@ public class AddBookmark extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         Connection conn;
+        PrintWriter writer = resp.getWriter();
+
+        if (ErrorChecker.checkParameters(req, new String[]{"email", "loginsessions", "courseid", "userid"})) {
+            resp.setStatus(400);
+        } else {
+
+            String email = req.getParameter("email");
+            String loginSession = req.getParameter("loginsession");
+
+            try {
+
+                conn = DatabaseStuff.DbConnect.getConnection();
+                DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
+                db.checkLoginSession(email, loginSession);
+                try {
+                    int couseid = Integer.parseInt(req.getParameter("courseid"));
+                    int userid = Integer.parseInt(req.getParameter("userid"));
+                    db.addBookmark(couseid, userid);
+                } catch (NumberFormatException e) {
+                    resp.setStatus(400);
+                }
 
 
-
-        try {
-
-            conn = DatabaseStuff.DbConnect.getConnection();
-            DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
-
-            try{
-                int couseid = Integer.parseInt(req.getParameter("courseid"));
-                int userid = Integer.parseInt(req.getParameter("userid"));
-                db.addBookmark(couseid, userid);
-            } catch (NumberFormatException e){
-                resp.setStatus(400);
-                throw(e);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-
-
-
-
-
-
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

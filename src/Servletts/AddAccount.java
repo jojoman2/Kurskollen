@@ -42,7 +42,7 @@ public class AddAccount extends HttpServlet {
             Boolean addAccount =true;
             String emailString = req.getParameter("email");
 
-            if (ErrorChecker.validate(emailString)){
+            if (ErrorChecker.validateEmail(emailString)){
                 email = req.getParameter("email");
             }else{
                 addAccount = false;
@@ -69,6 +69,7 @@ public class AddAccount extends HttpServlet {
             e.printStackTrace();
         } catch (SQLException e) {
             if(e.getErrorCode()==1062){
+                writer.println("Username or email already exists");
                 resp.setStatus(400);
             }
             else{

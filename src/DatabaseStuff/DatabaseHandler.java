@@ -31,13 +31,13 @@ public class DatabaseHandler {
         stmt.executeUpdate();
     }
 
-    public boolean activateUser(int userId, String enteredActivationCode) throws SQLException {
+    public boolean activateUser(String userEmail, String enteredActivationCode) throws SQLException {
         String selectQuery =
                 "SELECT activationcode"+
                 " FROM users"+
-                " WHERE id=?";
+                " WHERE email=?";
         PreparedStatement selectStmt = conn.prepareStatement(selectQuery);
-        selectStmt.setInt(1, userId);
+        selectStmt.setString(1, userEmail);
         ResultSet result = selectStmt.executeQuery();
         result.next();
         String activationCode = result.getString("activationcode");
@@ -56,9 +56,9 @@ public class DatabaseHandler {
         String updateQuery =
                 "UPDATE users"+
                 " SET activated=1, activationcode = NULL" +
-                " WHERE id=?";
+                " WHERE email=?";
         PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
-        updateStmt.setInt(1,userId);
+        updateStmt.setString(1,userEmail);
         updateStmt.executeUpdate();
         return true;
 
@@ -68,24 +68,28 @@ public class DatabaseHandler {
         String query =
                 "SELECT passwordhash" +
                 " FROM users" +
-                " WHERE email=?";
+                " WHERE email=?" +
+                " LIMIT 1";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1,email);
         ResultSet result = stmt.executeQuery();
+        if(result.getFetchSize()!=1){
+            return false;
+        }
         result.next();
         String hashedPassword = result.getString("passwordhash");
         return BCrypt.checkpw(password,hashedPassword);
     }
 
-    public void changeUserDetails(int userId, String newName, String newPassword) throws SQLException {
+    public void changeUserDetails(String email, String newName, String newPassword) throws SQLException {
         if(newName!=null) {
             String query =
                     "UPDATE users" +
                     " SET name=?"+
-                    " WHERE id=?";
+                    " WHERE email=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,newName);
-            stmt.setInt(2,userId);
+            stmt.setString(2,email);
             stmt.executeUpdate();
         }
         if(newPassword!=null){
@@ -93,54 +97,64 @@ public class DatabaseHandler {
             String query =
                     "UPDATE users" +
                     " SET passwordhash=?"+
-                    " WHERE id=?";
+                    " WHERE email=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,passwordHash);
-            stmt.setInt(2,userId);
+            stmt.setString(2,email);
             stmt.executeUpdate();
         }
     }
 
-    public User getUserInfo(int userid) throws SQLException {
+    public User getUserInfo(String email) throws SQLException {
         String query =
-                "SELECT name,email" +
+                "SELECT name" +
                 " FROM users"+
-                " WHERE id=?";
+                " WHERE email=?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1,userid);
+        stmt.setString(1,email);
         ResultSet result = stmt.executeQuery();
         result.next();
-        return new User(result.getString("name"),result.getString("email"));
+        return new User(result.getString("name"),email);
     }
 
     //Checks if user loginsession equals login session
-    public boolean checkLoginSession(int userId, String loginSession) throws SQLException {
+    public boolean checkLoginSession(String email, String loginSession) throws SQLException {
         String query =
-                "SELECT loginsession FROM users" +
-                " WHERE id=?";
+                "SELECT loginsession FROM users"+
+                " WHERE email=?" +
+                " LIMIT 1";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, userId);
+        stmt.setString(1, email);
 
         ResultSet result =stmt.executeQuery();
         result.next();
 
-        return loginSession.equals(result.getString("loginsession"));
+        String storedLogin = result.getString("loginsession");
+
+        //Compares in a way which avoids attacks measuring comparation time
+        boolean sameString = true;
+        for(int i = 0;i<Math.min(loginSession.length(),storedLogin.length());i++){
+            if(loginSession.charAt(i)!=storedLogin.charAt(i)){
+                sameString=false;
+            }
+        }
+        return sameString;
     }
 
 
     //lägga in loginsessionide
-    public void updateLoginSession(int userId, String loginSession) throws SQLException {
+    public void updateLoginSession(String email, String loginSession) throws SQLException {
         String query =
                 "UPDATE users"+
                 " SET loginsession = ?"+
-                " WHERE userid = ?";
+                " WHERE email = ?";
 
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, loginSession);
-        stmt.setInt(2,userId);
+        stmt.setString(2,email);
         stmt.executeUpdate();
 
 
@@ -252,12 +266,12 @@ public class DatabaseHandler {
 
     }
 
-    public List<Course> listBookmarks(int userId) throws SQLException {
+    public List<Course> listBookmarks(String userEmail) throws SQLException {
         String query = "SELECT * FROM courses WHERE id IN (SELECT courseid FROM savedcourse" +
-                        " WHERE userid = ?)";
+                        " WHERE useremail = ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, userId);
+        stmt.setString(1, userEmail);
 
         ResultSet results = stmt.executeQuery();
 
@@ -271,13 +285,13 @@ public class DatabaseHandler {
 
     }
 
-    public void removeBookmark(int course, int userId) throws SQLException {
+    public void removeBookmark(int course, String userEmail) throws SQLException {
         String query = "DELETE FROM savedcourse" +
-                        " WHERE courseid = ? AND userid = ?";
+                        " WHERE courseid = ? AND useremail = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, course);
-        stmt.setInt(2, userId);
+        stmt.setString(2, userEmail);
         stmt.executeUpdate();
 
 
@@ -285,14 +299,14 @@ public class DatabaseHandler {
 
     //Review
     public void addReview(Review review) throws SQLException {
-        String query = "INSERT INTO reviews(rating,time, text, userid, courseid, teacherid)" +
+        String query = "INSERT INTO reviews(rating,time, text, useremail, courseid, teacherid)" +
                         " VALUES (?,?,?,?,?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, review.getRating());
         stmt.setLong(2, review.getTime());
         stmt.setString(3, review.getText());
-        stmt.setInt(4, review.getCourseid());
+        stmt.setString(4, review.getUserEmail());
         stmt.setInt(5, review.getCourseid());
         stmt.setInt(6, review.getTeacherid());
 
@@ -314,7 +328,7 @@ public class DatabaseHandler {
 
         List<Review> reviews = new ArrayList<Review>();
         while(results.next()){
-            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getInt("userid"), results.getInt("courseid"), results.getInt("teacherid"));
+            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getString("useremail"), results.getInt("courseid"), results.getInt("teacherid"));
             reviews.add(review);
         }
         return reviews;
@@ -322,18 +336,18 @@ public class DatabaseHandler {
 
     }
 
-    public List<Review> getReviewsByUser(int userId) throws SQLException {
+    public List<Review> getReviewsByUser(String userEmail) throws SQLException {
         String query  =  "SELECT * FROM reviews" +
-                        " WHERE userid = ?";
+                        " WHERE useremail = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, userId);
+        stmt.setString(1, userEmail);
 
         ResultSet results = stmt.executeQuery();
 
         List<Review> reviews = new ArrayList<Review>();
         while(results.next()){
-            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getInt("userid"), results.getInt("courseid"), results.getInt("teacherid"));
+            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getString("useremail"), results.getInt("courseid"), results.getInt("teacherid"));
             reviews.add(review);
         }
         return reviews;
