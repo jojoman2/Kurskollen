@@ -36,13 +36,17 @@ public class AddBookmark extends HttpServlet {
 
                 conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
-                db.checkLoginSession(email, loginSession);
-                try {
-                    int couseid = Integer.parseInt(req.getParameter("courseid"));
-                    int userid = Integer.parseInt(req.getParameter("userid"));
-                    db.addBookmark(couseid, userid);
-                } catch (NumberFormatException e) {
-                    resp.setStatus(400);
+                if(!db.checkLoginSession(email, loginSession)){
+                    resp.setStatus(401);
+                }
+                else {
+                    try {
+                        int couseid = Integer.parseInt(req.getParameter("courseid"));
+                        int userid = Integer.parseInt(req.getParameter("userid"));
+                        db.addBookmark(couseid, userid);
+                    } catch (NumberFormatException e) {
+                        resp.setStatus(400);
+                    }
                 }
 
 
