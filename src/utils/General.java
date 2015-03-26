@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class General {
 
-    private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static Random rnd = new Random();
 
     public static String randomString(int len)

@@ -19,7 +19,7 @@ public class AddCourse extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"coursecode", "name", "description", "credits", "online", "link", "schoolid" })) {
+        if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","coursecode", "name", "description", "credits", "online", "link", "schoolid" })) {
             resp.setStatus(400);
         } else {
 
@@ -27,19 +27,27 @@ public class AddCourse extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String creditsString = req.getParameter("credits");
-                float credits = Float.parseFloat("creditsString");
+                String email = req.getParameter("email");
+                String loginsession = req.getParameter("loginsession");
+
+                if(!db.checkLoginSession(email,loginsession)) {
+                    resp.setStatus(401);
+                }
+                else{
+                    String creditsString = req.getParameter("credits");
+                    float credits = Float.parseFloat("creditsString");
 
 
-                String schoolIdString = req.getParameter("schoolid");
-                int schoolid = Integer.parseInt("schoolid");
+                    String schoolIdString = req.getParameter("schoolid");
+                    int schoolid = Integer.parseInt("schoolid");
 
 
-                String onlineString = req.getParameter("online");
-                boolean online = onlineString.equals("1");
+                    String onlineString = req.getParameter("online");
+                    boolean online = onlineString.equals("1");
 
-                Course course =  new Course(req.getParameter("coursecode"), req.getParameter("name"), req.getParameter("description"), credits, online, req.getParameter("link"), schoolid);
-                db.addCourse(course);
+                    Course course = new Course(req.getParameter("coursecode"), req.getParameter("name"), req.getParameter("description"), credits, online, req.getParameter("link"), schoolid);
+                    db.addCourse(course);
+                }
 
 
             } catch (ClassNotFoundException e) {

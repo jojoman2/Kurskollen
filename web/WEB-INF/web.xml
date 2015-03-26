@@ -19,6 +19,18 @@
         <servlet-name>CreateReview</servlet-name>
         <servlet-class>Servletts.CreateReview</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangeUserSettings</servlet-name>
+        <servlet-class>Servletts.ChangeUserSettings</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ActivateUser</servlet-name>
+        <servlet-class>Servletts.ActivateUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddCourse</servlet-name>
+        <servlet-class>Servletts.AddCourse</servlet-class>
+    </servlet>
     
     
     <servlet-mapping>
@@ -46,4 +58,18 @@
         <url-pattern>create-review</url-pattern>
     </servlet-mapping>
     
+    <servlet-mapping>
+        <servlet-name>ChangeUserSettings</servlet-name>
+        <url-pattern>change-user-setting</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ActivateUser</servlet-name>
+        <url-pattern>activate-user</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AddCourse</servlet-name>
+        <url-pattern>add-course</url-pattern>
+    </servlet-mapping>
 </web-app>
