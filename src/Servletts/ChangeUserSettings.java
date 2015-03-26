@@ -26,7 +26,7 @@ public class ChangeUserSettings extends HttpServlet {
 
                 db.changeUserDetails(req.getParameter("email"), req.getParameter("newName"), req.getParameter("newPassword"));
                 resp.setStatus(200);
-                
+
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {
