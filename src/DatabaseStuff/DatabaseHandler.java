@@ -31,34 +31,6 @@ public class DatabaseHandler {
         stmt.executeUpdate();
     }
 
-    public boolean checkEmailUnique(String email) throws SQLException {
-        String query =
-                "SELECT COUNT(1) FROM users" +
-                        " WHERE email = ?"+
-                        " LIMIT 1";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1,email);
-        ResultSet results = stmt.executeQuery();
-        results.next();
-        return results.getInt(1) == 1;
-
-    }
-
-    public boolean checkNameUnique( String name) throws SQLException {
-        String query =
-                "SELECT COUNT(1) FROM users" +
-                        " WHERE name = ?"+
-                        " LIMIT 1";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1,name);
-        ResultSet results = stmt.executeQuery();
-        results.next();
-        return results.getInt(1) == 1;
-
-    }
-
     public boolean activateUser(int userId, String enteredActivationCode) throws SQLException {
         String selectQuery =
                 "SELECT activationcode"+
