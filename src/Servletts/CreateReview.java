@@ -22,7 +22,7 @@ public class CreateReview extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"rating", "courseid","teacherid", "password","text","useremail"})) {
+        if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","rating", "courseid","teacherid","text"})) {
             resp.setStatus(400);
         } else {
 
@@ -30,16 +30,31 @@ public class CreateReview extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String ratingString = req.getParameter("rating");
-                String courseIdString = req.getParameter("courseid");
-                String teacherIdString = req.getParameter("teacherid");
+                String email = req.getParameter("useremail");
+                String loginSession = req.getParameter("loginsession");
 
-                int rating = Integer.parseInt(ratingString);
-                int courseid = Integer.parseInt(courseIdString);
-                int teacherid = Integer.parseInt(teacherIdString);
-                Review review = new Review(System.currentTimeMillis() / 1000, rating, req.getParameter("text"), req.getParameter("useremail"), courseid, teacherid);
-                db.addReview(review);
-                resp.setStatus(201);
+                if(!db.checkLoginSession(email, loginSession)){
+                    resp.setStatus(401);
+                }
+                else {
+
+                    String ratingString = req.getParameter("rating");
+                    String courseIdString = req.getParameter("courseid");
+                    String teacherIdString = req.getParameter("teacherid");
+
+                    int rating = Integer.parseInt(ratingString);
+                    int courseid = Integer.parseInt(courseIdString);
+                    int teacherid = Integer.parseInt(teacherIdString);
+
+                    if(rating>5||rating<0){
+                        resp.setStatus(400);
+                    }
+                    else {
+                        Review review = new Review(System.currentTimeMillis() / 1000, rating, req.getParameter("text"), req.getParameter("useremail"), courseid, teacherid);
+                        db.addReview(review);
+                        resp.setStatus(201);
+                    }
+                }
 
 
             } catch (ClassNotFoundException e) {
