@@ -43,8 +43,11 @@ public class DatabaseHandler {
         String activationCode = result.getString("activationcode");
 
         //Equals which stops any attacker from measuring the time taken to compare to figure out the activation code:
+        if(enteredActivationCode.length()!=activationCode.length()){
+            return false;
+        }
         boolean equals = true;
-        for(int i=0;i<Math.min(enteredActivationCode.length(),activationCode.length());i++){
+        for(int i=0;i<enteredActivationCode.length();i++){
             if(enteredActivationCode.charAt(i)!=activationCode.charAt(i)){
                 equals = false;
             }

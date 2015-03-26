@@ -19,13 +19,26 @@ public class ChangeUserSettings extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
+        if (!ErrorChecker.checkParameters(req, new String[]{"email", "loginsession"})) {
+            resp.setStatus(400);
+        }
+        else {
+
             Connection conn = null;
             try {
                 conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                db.changeUserDetails(req.getParameter("email"), req.getParameter("newName"), req.getParameter("newPassword"));
-                resp.setStatus(200);
+                String email = req.getParameter("email");
+                String loginSession = req.getParameter("loginsession");
+
+                if (!db.checkLoginSession(email, loginSession)) {
+                    resp.setStatus(401);
+                }
+                else {
+                    db.changeUserDetails(email, req.getParameter("newName"), req.getParameter("newPassword"));
+                    resp.setStatus(200);
+                }
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -33,6 +46,6 @@ public class ChangeUserSettings extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
+    }
 
 }
