@@ -1,6 +1,8 @@
 package Servletts;
 
 import Beans.Review;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +17,7 @@ import java.util.List;
 /**
  * Created by Fredrik on 2015-03-19.
  */
-public class GetCourseReviews extends HttpServlet {
+public class GetCoursereviews extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

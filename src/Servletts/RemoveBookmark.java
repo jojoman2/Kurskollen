@@ -28,7 +28,7 @@ public class RemoveBookmark extends HttpServlet{
             DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
 
             try{
-                db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), Integer.parseInt(req.getParameter("userid")));
+                db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), req.getParameter("useremail"));
             }
             catch(NumberFormatException e){
                 resp.setStatus(400);

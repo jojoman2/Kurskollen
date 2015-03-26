@@ -1,6 +1,8 @@
 package Servletts;
 
 import Beans.Review;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,13 +28,9 @@ public class GetMyReviews extends HttpServlet {
             Connection conn  = DatabaseStuff.DbConnect.getConnection();
             DatabaseStuff.DatabaseHandler db  = new DatabaseStuff.DatabaseHandler(conn);
 
-            String userIdString =  req.getParameter("userid");
-            int userid = -1;
-            if (userIdString !=null){
-                userid = Integer.parseInt(userIdString);
-            }
+            String userEmail =  req.getParameter("userEmail");
 
-            List<Review> reviews = db.getReviewsByUser(userid);
+            List<Review> reviews = db.getReviewsByUser(userEmail);
             JSONArray reviewsJson = new JSONArray();
             for (Review review: reviews){
                 reviewsJson.put(new JSONObject(review));
