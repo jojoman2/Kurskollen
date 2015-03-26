@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-public class getTeacherInfo extends HttpServlet {
+public class GetTeacherInfo extends HttpServlet {
 
     //TEST ME PLZ!!!!!
 
