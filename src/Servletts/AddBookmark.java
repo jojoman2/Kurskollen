@@ -20,8 +20,8 @@ public class AddBookmark extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Connection conn = null;
-        PrintWriter writer  = resp.getWriter();
+        Connection conn;
+
 
 
         try {
