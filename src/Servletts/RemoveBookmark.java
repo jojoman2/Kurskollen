@@ -1,6 +1,7 @@
 package Servletts;
 
 import DatabaseStuff.DatabaseHandler;
+import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,27 +21,27 @@ public class RemoveBookmark extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        Connection conn = null;
+        if (!ErrorChecker.checkParameters(req, new String[]{"courseid", "useremail"})) {
+            resp.setStatus(400);
+        } else {
 
 
-        try {
-            conn= DatabaseStuff.DbConnect.getConnection();
-            DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
+            try {
+                Connection conn = DatabaseStuff.DbConnect.getConnection();
+                DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
 
-            try{
-                db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), req.getParameter("useremail"));
+                try {
+                    db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), req.getParameter("useremail"));
+                } catch (NumberFormatException e) {
+                    resp.setStatus(400);
+                }
+
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            catch(NumberFormatException e){
-                resp.setStatus(400);
-            }
-
-
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
     }
 }

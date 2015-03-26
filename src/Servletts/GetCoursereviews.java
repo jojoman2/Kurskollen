@@ -3,6 +3,7 @@ package Servletts;
 import Beans.Review;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,33 +25,37 @@ public class GetCoursereviews extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Connection conn = null;
-        PrintWriter writer  = resp.getWriter();
 
-        try {
-            conn = DatabaseStuff.DbConnect.getConnection();
-            DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
-
-            String courseIdString = req.getParameter("courseid");
-            int courseid = Integer.parseInt(courseIdString);
-
-
-            List<Review> reviews = db.getReviewsByCourse(courseid);
-            JSONArray reviewsJson =  new JSONArray();
-            for (Review review : reviews){
-                reviewsJson.put(new JSONObject(review));
-            }
-            writer.print(reviewsJson.toString());
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e){
+        if (!ErrorChecker.checkParameters(req, new String[]{"courseid"})) {
             resp.setStatus(400);
+        } else {
+
+            PrintWriter writer = resp.getWriter();
+
+            try {
+                Connection conn = DatabaseStuff.DbConnect.getConnection();
+                DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
+
+                String courseIdString = req.getParameter("courseid");
+                int courseid = Integer.parseInt(courseIdString);
+
+
+                List<Review> reviews = db.getReviewsByCourse(courseid);
+                JSONArray reviewsJson = new JSONArray();
+                for (Review review : reviews) {
+                    reviewsJson.put(new JSONObject(review));
+                }
+                writer.print(reviewsJson.toString());
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                resp.setStatus(400);
+            }
+
         }
-
-
 
 
     }
