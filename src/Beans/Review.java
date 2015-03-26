@@ -8,15 +8,15 @@ public class Review {
     private long time;
     private int rating;
     private String text;
-    private int userid;
+    private String useremail;
     private int courseid;
     private int teacherid;
 
-    public Review(long time, int rating, String text, int userid, int courseid, int teacherid) {
+    public Review(long time, int rating, String text, String useremail, int courseid, int teacherid) {
         this.time = time;
         this.rating = rating;
         this.text = text;
-        this.userid = userid;
+        this.useremail = useremail;
         this.courseid = courseid;
         this.teacherid = teacherid;
     }
@@ -33,8 +33,8 @@ public class Review {
         return text;
     }
 
-    public int getUserid(){
-        return userid;
+    public String getUserEmail(){
+        return useremail;
     }
 
     public int getCourseid() {

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
  */
 public class ErrorChecker {
 
+    /*Checks that all the request sent in has all the parameters in the string array*/
     public static boolean checkParameters(HttpServletRequest req, String[] parameterNames){
         for(String paramaterName : parameterNames){
             if (req.getParameter(paramaterName) ==null){
@@ -24,9 +25,9 @@ public class ErrorChecker {
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 
-    public static boolean validate(final String hex) {
+    public static boolean validateEmail(final String email) {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        Matcher matcher = pattern.matcher(hex);
+        Matcher matcher = pattern.matcher(email);
         return matcher.matches();
 
     }
