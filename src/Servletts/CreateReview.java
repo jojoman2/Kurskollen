@@ -46,9 +46,10 @@ public class CreateReview extends HttpServlet {
 
                     if(rating>5||rating<0){
                         resp.setStatus(400);
+                        throw(new RuntimeException(""+rating));
                     }
                     else {
-                        Review review = new Review(System.currentTimeMillis() / 1000, rating, req.getParameter("text"), req.getParameter("useremail"), courseid, teacherid);
+                        Review review = new Review(System.currentTimeMillis() / 1000, rating, req.getParameter("text"), req.getParameter("email"), courseid, teacherid);
                         db.addReview(review);
                         resp.setStatus(201);
                     }
@@ -59,7 +60,7 @@ public class CreateReview extends HttpServlet {
                 e.printStackTrace();
             } catch (SQLException e) {
                 e.printStackTrace();
-                resp.setStatus(400);
+                resp.setStatus(500);
             } catch (NumberFormatException e){
                 resp.setStatus(400);
             }
