@@ -134,8 +134,11 @@ public class DatabaseHandler {
         String storedLogin = result.getString("loginsession");
 
         //Compares in a way which avoids attacks measuring comparation time
+        if(loginSession.length()!=storedLogin.length()){
+            return false;
+        }
         boolean sameString = true;
-        for(int i = 0;i<Math.min(loginSession.length(),storedLogin.length());i++){
+        for(int i = 0;i<(loginSession.length());i++){
             if(loginSession.charAt(i)!=storedLogin.charAt(i)){
                 sameString=false;
             }
@@ -254,13 +257,13 @@ public class DatabaseHandler {
 
 
     //Bookmark
-    public void addBookmark(int course, int userId) throws SQLException {
-        String query = "INSERT INTO savedcourse(courseid, userid)"+
+    public void addBookmark(int course, String userEmail) throws SQLException {
+        String query = "INSERT INTO savedcourse(courseid, useremail)"+
                         " VALUES (?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, course);
-        stmt.setInt(2, userId);
+        stmt.setString(2, userEmail);
         stmt.executeUpdate();
 
 

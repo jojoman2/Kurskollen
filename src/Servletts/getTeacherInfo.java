@@ -3,6 +3,9 @@ package Servletts;
 import Beans.Course;
 import Beans.Teacher;
 import DatabaseStuff.DatabaseHandler;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,18 +43,21 @@ public class GetTeacherInfo extends HttpServlet {
             List<Course> courses = db.getCoursesByTeacher(teacherid);
 
             JSONObject teacherCourses = new JSONObject();
-            teacherCourses.put(teacher);
+
+            teacherCourses.put("name",teacher.getName());
             JSONArray courseJson = new JSONArray();
             for(Course course : courses){
                 courseJson.put(new JSONObject(course));
             }
-            teacherCourses.put(courseJson);
+            teacherCourses.put("courses",courseJson);
 
             writer.print(teacherCourses.toString());
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
