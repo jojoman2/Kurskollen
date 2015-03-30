@@ -21,19 +21,28 @@ public class RemoveBookmark extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"courseid", "useremail"})) {
+        if (!ErrorChecker.checkParameters(req, new String[]{"courseid", "useremail", "loginsession"})) {
             resp.setStatus(400);
         } else {
 
+            String email = req.getParameter("useremail");
+            String loginSession = req.getParameter("loginsession");
+
 
             try {
+
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
-
-                try {
-                    db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), req.getParameter("useremail"));
-                } catch (NumberFormatException e) {
-                    resp.setStatus(400);
+                if(!db.checkLoginSession(email, loginSession)){
+                    resp.setStatus(401);
+                }
+                else {
+                    try {
+                        db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), req.getParameter("useremail"));
+                        resp.setStatus(204);
+                    } catch (NumberFormatException e) {
+                        resp.setStatus(400);
+                    }
                 }
 
 
