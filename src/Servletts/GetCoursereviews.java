@@ -41,6 +41,7 @@ public class GetCoursereviews extends HttpServlet {
 
 
                 List<Review> reviews = db.getReviewsByCourse(courseid);
+                System.out.print(reviews.size());
                 JSONArray reviewsJson = new JSONArray();
                 for (Review review : reviews) {
                     reviewsJson.put(new JSONObject(review));

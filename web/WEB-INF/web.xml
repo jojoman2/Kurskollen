@@ -31,6 +31,18 @@
         <servlet-name>AddCourse</servlet-name>
         <servlet-class>Servletts.AddCourse</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetCourseReviews</servlet-name>
+        <servlet-class>Servletts.GetCoursereviews</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetMyReviews</servlet-name>
+        <servlet-class>Servletts.GetMyReviews</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetTeacherInfo</servlet-name>
+        <servlet-class>Servletts.GetTeacherInfo</servlet-class>
+    </servlet>
     
     
     <servlet-mapping>
@@ -71,5 +83,17 @@
     <servlet-mapping>
         <servlet-name>AddCourse</servlet-name>
         <url-pattern>add-course</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCourseReviews</servlet-name>
+        <url-pattern>get-course-reviews</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetMyReviews</servlet-name>
+        <url-pattern>get-my-reviews</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetTeacherInfo</servlet-name>
+        <url-pattern>get-teacher-info</url-pattern>
     </servlet-mapping>
 </web-app>

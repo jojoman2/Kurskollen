@@ -430,9 +430,10 @@ public class DatabaseHandler {
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, id);
         ResultSet result = stmt.executeQuery();
-        Teacher teacher = new Teacher(result.getInt("id"), result.getString("name"));
-
-        return teacher;
+        if(!result.next()){
+            return null;
+        }
+        return new Teacher(result.getInt("id"), result.getString("name"));
     }
 
 

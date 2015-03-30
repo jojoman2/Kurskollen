@@ -23,7 +23,7 @@ public class GetMyReviews extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"userEmail"})) {
+        if (!ErrorChecker.checkParameters(req, new String[]{"userEmail","loginsession"})) {
             resp.setStatus(400);
         } else {
             PrintWriter writer = resp.getWriter();
@@ -33,14 +33,21 @@ public class GetMyReviews extends HttpServlet {
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
                 String userEmail = req.getParameter("userEmail");
+                String loginsession = req.getParameter("loginsession");
 
-                List<Review> reviews = db.getReviewsByUser(userEmail);
-                JSONArray reviewsJson = new JSONArray();
-                for (Review review : reviews) {
-                    reviewsJson.put(new JSONObject(review));
+                if(!db.checkLoginSession(userEmail,loginsession)) {
+                    resp.setStatus(401);
                 }
+                else {
 
-                writer.print(reviewsJson.toString());
+                    List<Review> reviews = db.getReviewsByUser(userEmail);
+                    JSONArray reviewsJson = new JSONArray();
+                    for (Review review : reviews) {
+                        reviewsJson.put(new JSONObject(review));
+                    }
+
+                    writer.print(reviewsJson.toString());
+                }
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

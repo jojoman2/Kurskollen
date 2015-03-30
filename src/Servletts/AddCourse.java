@@ -19,7 +19,7 @@ public class AddCourse extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","coursecode", "name", "description", "credits", "online", "link", "schoolid" })) {
+        if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","coursecode", "name", "credits", "online", "schoolid" })) {
             resp.setStatus(400);
         } else {
 
@@ -35,11 +35,11 @@ public class AddCourse extends HttpServlet {
                 }
                 else{
                     String creditsString = req.getParameter("credits");
-                    float credits = Float.parseFloat("creditsString");
+                    float credits = Float.parseFloat(creditsString);
 
 
                     String schoolIdString = req.getParameter("schoolid");
-                    int schoolid = Integer.parseInt("schoolid");
+                    int schoolid = Integer.parseInt(schoolIdString);
 
 
                     String onlineString = req.getParameter("online");
@@ -56,6 +56,7 @@ public class AddCourse extends HttpServlet {
                 e.printStackTrace();
             } catch (NumberFormatException e){
                 resp.setStatus(400);
+                e.printStackTrace();
             }
 
          }
