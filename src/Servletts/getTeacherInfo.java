@@ -42,18 +42,23 @@ public class GetTeacherInfo extends HttpServlet {
 
 
                 Teacher teacher = db.getTeacherById(teacherid);
-                List<Course> courses = db.getCoursesByTeacher(teacherid);
-
-                JSONObject teacherCourses = new JSONObject();
-
-                teacherCourses.put("name", teacher.getName());
-                JSONArray courseJson = new JSONArray();
-                for (Course course : courses) {
-                    courseJson.put(new JSONObject(course));
+                if(teacher == null){
+                    resp.setStatus(400);
                 }
-                teacherCourses.put("courses", courseJson);
+                else {
+                    List<Course> courses = db.getCoursesByTeacher(teacherid);
 
-                writer.print(teacherCourses.toString());
+                    JSONObject teacherCourses = new JSONObject();
+
+                    teacherCourses.put("name", teacher.getName());
+                    JSONArray courseJson = new JSONArray();
+                    for (Course course : courses) {
+                        courseJson.put(new JSONObject(course));
+                    }
+                    teacherCourses.put("courses", courseJson);
+
+                    writer.print(teacherCourses.toString());
+                }
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
