@@ -74,7 +74,9 @@ public class DatabaseHandler {
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, email);
         ResultSet result = stmt.executeQuery();
-
+        if(!result.next()){
+            return false;
+        }
         return result.getBoolean("activated");
 
 
@@ -90,10 +92,9 @@ public class DatabaseHandler {
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1,email);
         ResultSet result = stmt.executeQuery();
-        if(result.getFetchSize()!=1){
+        if(!result.next()){
             return false;
         }
-        result.next();
         String hashedPassword = result.getString("passwordhash");
         return BCrypt.checkpw(password,hashedPassword);
     }

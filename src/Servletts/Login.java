@@ -23,20 +23,24 @@ public class Login extends HttpServlet {
 
 
         //Check if the login was correct and if so send a loginsession id to the client
-        if (!ErrorChecker.checkParameters(req, new String[]{"email", "name", "password"})) {
+        if (!ErrorChecker.checkParameters(req, new String[]{"email", "password"})) {
             resp.setStatus(400);
         }
         else {
             try {
                 Connection conn  = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
-
-                boolean checkLogin = db.checkUser(req.getParameter("email"), req.getParameter("password"));
-                boolean checkActivated = db.isActivated(req.getParameter("email"));
+                String email = req.getParameter("email");
+                String password = req.getParameter("password");
+                System.out.println("email: "+email+" password: "+password);
+                boolean checkLogin = db.checkUser(email,password);
+                System.out.println("checkLogin: " + Boolean.toString(checkLogin));
+                boolean checkActivated = db.isActivated(email);
+                System.out.println("checkActivated: " + Boolean.toString(checkActivated));
                 if (checkLogin && checkActivated){
                     String loginsession = General.randomString(25);
                     writer.print(loginsession);
-                    db.updateLoginSession(req.getParameter("email"), loginsession);
+                    db.updateLoginSession(email, loginsession);
                 }else if(checkLogin && !checkActivated){
                     writer.print("User not activated");
                     resp.setStatus(401);

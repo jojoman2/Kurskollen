@@ -3,47 +3,69 @@
         <servlet-name>The servlett</servlet-name>
         <servlet-class>Servletts.TestServlett</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>SearchForCourse</servlet-name>
         <servlet-class>Servletts.SearchForCourse</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>AddBookmark</servlet-name>
         <servlet-class>Servletts.AddBookmark</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>AddAccount</servlet-name>
         <servlet-class>Servletts.AddAccount</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>CreateReview</servlet-name>
         <servlet-class>Servletts.CreateReview</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>ChangeUserSettings</servlet-name>
         <servlet-class>Servletts.ChangeUserSettings</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>ActivateUser</servlet-name>
         <servlet-class>Servletts.ActivateUser</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>AddCourse</servlet-name>
         <servlet-class>Servletts.AddCourse</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>GetCourseReviews</servlet-name>
         <servlet-class>Servletts.GetCoursereviews</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>GetMyReviews</servlet-name>
         <servlet-class>Servletts.GetMyReviews</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>GetTeacherInfo</servlet-name>
         <servlet-class>Servletts.GetTeacherInfo</servlet-class>
     </servlet>
+
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>Servletts.Login</servlet-class>
+    </servlet>
     
+    <servlet>
+        <servlet-name>RemoveBookmark</servlet-name>
+        <servlet-class>Servletts.RemoveBookmark</servlet-class>
+    </servlet>
+
+
+
     
     <servlet-mapping>
         <servlet-name>The servlett</servlet-name>
@@ -84,16 +106,29 @@
         <servlet-name>AddCourse</servlet-name>
         <url-pattern>add-course</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>GetCourseReviews</servlet-name>
         <url-pattern>get-course-reviews</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>GetMyReviews</servlet-name>
         <url-pattern>get-my-reviews</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>GetTeacherInfo</servlet-name>
         <url-pattern>get-teacher-info</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>login</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RemoveBookmark</servlet-name>
+        <url-pattern>remove-bookmark</url-pattern>
     </servlet-mapping>
 </web-app>

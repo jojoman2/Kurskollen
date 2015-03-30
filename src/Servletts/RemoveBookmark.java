@@ -19,8 +19,6 @@ public class RemoveBookmark extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-
         if (!ErrorChecker.checkParameters(req, new String[]{"courseid", "useremail", "loginsession"})) {
             resp.setStatus(400);
         } else {
