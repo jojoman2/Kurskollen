@@ -49,8 +49,10 @@ public class Login extends HttpServlet {
                     resp.setStatus(401);
                 }
             } catch (ClassNotFoundException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             }
 

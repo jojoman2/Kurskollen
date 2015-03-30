@@ -57,6 +57,7 @@ public class CreateReview extends HttpServlet {
 
 
             } catch (ClassNotFoundException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
                 e.printStackTrace();

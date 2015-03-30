@@ -51,8 +51,10 @@ public class AddCourse extends HttpServlet {
 
 
             } catch (ClassNotFoundException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (NumberFormatException e){
                 resp.setStatus(400);

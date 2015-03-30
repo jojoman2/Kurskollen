@@ -50,8 +50,10 @@ public class GetMyReviews extends HttpServlet {
                 }
 
             } catch (ClassNotFoundException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             }
         }

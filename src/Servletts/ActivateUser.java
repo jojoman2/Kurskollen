@@ -33,8 +33,10 @@ public class ActivateUser extends HttpServlet {
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+                resp.setStatus(500);
             } catch (SQLException e) {
                 e.printStackTrace();
+                resp.setStatus(500);
             }
 
 

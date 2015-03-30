@@ -68,6 +68,7 @@ public class AddAccount extends HttpServlet {
 
 
             } catch (ClassNotFoundException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
                 if (e.getErrorCode() == 1062) {
