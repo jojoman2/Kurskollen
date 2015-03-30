@@ -27,6 +27,8 @@ public class SearchForCourse extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Search for courses and return them
 
+        resp.setContentType("application/json; charset=UTF-8");
+
         Connection conn = null;
         PrintWriter writer = resp.getWriter();
         try {

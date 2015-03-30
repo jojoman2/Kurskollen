@@ -59,67 +59,77 @@
         <servlet-name>RemoveBookmark</servlet-name>
         <servlet-class>Servletts.RemoveBookmark</servlet-class>
     </servlet>
+    
+    <servlet>
+        <servlet-name>TestServlet</servlet-name>
+        <servlet-class>Servletts.TestServlett</servlet-class>
+    </servlet>
 
 
 
     
     <servlet-mapping>
         <servlet-name>SearchForCourse</servlet-name>
-        <url-pattern>search-course</url-pattern>
+        <url-pattern>/search-course</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>AddBookmark</servlet-name>
-        <url-pattern>add-bookmark</url-pattern>
+        <url-pattern>/add-bookmark</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>AddAccount</servlet-name>
-        <url-pattern>add-account</url-pattern>
+        <url-pattern>/add-account</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>CreateReview</servlet-name>
-        <url-pattern>create-review</url-pattern>
+        <url-pattern>/create-review</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>ChangeUserSettings</servlet-name>
-        <url-pattern>change-user-setting</url-pattern>
+        <url-pattern>/change-user-setting</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>ActivateUser</servlet-name>
-        <url-pattern>activate-user</url-pattern>
+        <url-pattern>/activate-user</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>AddCourse</servlet-name>
-        <url-pattern>add-course</url-pattern>
+        <url-pattern>/add-course</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>GetCourseReviews</servlet-name>
-        <url-pattern>get-course-reviews</url-pattern>
+        <url-pattern>/get-course-reviews</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>GetMyReviews</servlet-name>
-        <url-pattern>get-my-reviews</url-pattern>
+        <url-pattern>/get-my-reviews</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>GetTeacherInfo</servlet-name>
-        <url-pattern>get-teacher-info</url-pattern>
+        <url-pattern>/get-teacher-info</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
-        <url-pattern>login</url-pattern>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>RemoveBookmark</servlet-name>
-        <url-pattern>remove-bookmark</url-pattern>
+        <url-pattern>/remove-bookmark</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>TestServlet</servlet-name>
+        <url-pattern>/test</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -27,6 +27,8 @@ public class GetTeacherInfo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        resp.setContentType("application/json; charset=UTF-8");
+
         if (!ErrorChecker.checkParameters(req, new String[]{"teacherid"})) {
             resp.setStatus(400);
         } else {
@@ -61,10 +63,13 @@ public class GetTeacherInfo extends HttpServlet {
                 }
 
             } catch (ClassNotFoundException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (JSONException e) {
+                resp.setStatus(500);
                 e.printStackTrace();
             } catch (NumberFormatException e) {
                 resp.setStatus(400);

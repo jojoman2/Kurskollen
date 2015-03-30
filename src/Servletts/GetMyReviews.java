@@ -22,6 +22,7 @@ public class GetMyReviews extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json; charset=UTF-8");
 
         if (!ErrorChecker.checkParameters(req, new String[]{"userEmail","loginsession"})) {
             resp.setStatus(400);

@@ -19,6 +19,7 @@ public class CreateReview extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json; charset=UTF-8");
 
         if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","rating", "courseid","teacherid","text"})) {
             resp.setStatus(400);

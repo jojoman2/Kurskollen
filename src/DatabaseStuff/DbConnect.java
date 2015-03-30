@@ -19,7 +19,7 @@ public class DbConnect {
                 SystemProperty.Environment.Value.Production) {
             // Load the class that provides the new "jdbc:google:mysql://" prefix.
             Class.forName("com.mysql.jdbc.GoogleDriver");
-            url = "jdbc:google:mysql://your-project-id:your-instance-name/kurskollen?user=root";
+            url = "jdbc:google:mysql://kurskollenapp:kurskollensql/kurskollen?user=root";
         } else {
             // Local MySQL instance to use during development.
             Class.forName("com.mysql.jdbc.Driver");
