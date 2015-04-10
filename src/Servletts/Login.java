@@ -43,11 +43,11 @@ public class Login extends HttpServlet {
                     String loginsession = General.randomString(25);
                     writer.print(loginsession);
                     db.updateLoginSession(email, loginsession);
-                }else if(checkLogin && !checkActivated){
-                    writer.print("User not activated");
+                }else if(checkLogin){
+                    writer.print("user-not-activated");
                     resp.setStatus(401);
                 } else{
-                    writer.print("Wrong password or email");
+                    writer.print("wrong-email-or-password");
                     resp.setStatus(401);
                 }
             } catch (ClassNotFoundException e) {

@@ -38,16 +38,17 @@ public class SearchForCourse extends HttpServlet {
 
             String schoolidString = req.getParameter("schoolid");
             int schoolid = -1;
-            if (schoolidString !=null){
+            if (schoolidString != null) {
                 schoolid = Integer.parseInt(schoolidString);
             }
 
+            String onlineString = req.getParameter("online");
+            boolean online = onlineString != null && onlineString.equals("1");
 
 
-
-            List<Course> courses = db.searchForCourses(req.getParameter("name"), schoolid , req.getParameter("teacher"), req.getParameter("online").equals("1"));
+            List<Course> courses = db.searchForCourses(req.getParameter("name"), schoolid, req.getParameter("teacher"), online);
             JSONArray courseJson = new JSONArray();
-            for(Course course : courses) {
+            for (Course course : courses) {
                 courseJson.put(new JSONObject(course));
             }
             writer.print(courseJson.toString());

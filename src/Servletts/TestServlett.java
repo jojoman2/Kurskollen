@@ -17,6 +17,6 @@ public class TestServlett extends HttpServlet {
         resp.setContentType("text/plain; charset=UTF-8");
 
         PrintWriter writer = resp.getWriter();
-        writer.print("HEEEEEEEEJ!!!!!");
+        writer.print(resp.getCharacterEncoding());
     }
 }

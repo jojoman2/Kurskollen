@@ -21,19 +21,18 @@ public class EmailSender {
 
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("no-reply@kurskollenapp.appspot.com", "Kurskollen"));
+            //msg.setFrom(new InternetAddress("no-reply@kurskollenapp.appspotmail.com", "Kurskollen"));
+            msg.setFrom(new InternetAddress("freddewallen@gmail.com"));
             msg.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress(receivingEmail, name));
+                    new InternetAddress(receivingEmail));
             msg.setSubject("Kurskollen registreringskod");
-            msg.setText("Hej och tack för att du registrerade dig på Kurskollen. \n \n Din kod är: "+activationCode);
+            msg.setText("Hej och tack för att du registrerade dig på Kurskollen. \n \n Din kod är: " + activationCode);
             Transport.send(msg);
 
         } catch (AddressException e) {
-            // ...
+            throw(new RuntimeException("dfsdfsd"));
         } catch (MessagingException e) {
-            // ...
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            throw (new RuntimeException("dfsdfsd"));
         }
     }
 }
