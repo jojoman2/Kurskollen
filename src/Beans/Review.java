@@ -33,15 +33,15 @@ public class Review {
         return text;
     }
 
-    public String getUserEmail(){
+    public String userEmail(){
         return useremail;
     }
 
-    public int getCourseid() {
+    public int courseid() {
         return courseid;
     }
 
-    public int getTeacherid() {
+    public int teacherid() {
         return teacherid;
     }
 

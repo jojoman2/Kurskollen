@@ -10,6 +10,8 @@ import java.util.List;
 //dsdsdfsdsdf
 public class DatabaseHandler {
 
+    private static final int RESULTS_PER_PAGE = 50;
+
     private Connection conn;
 
     public DatabaseHandler(Connection conn){
@@ -213,19 +215,24 @@ public class DatabaseHandler {
         stmt.setFloat(4, course.getCredits());
         stmt.setBoolean(5, course.isOnline());
         stmt.setString(6, course.getLink());
-        stmt.setInt(7, course.getSchoolId());
+        stmt.setInt(7, course.schoolId());
 
         stmt.executeUpdate();
     }
 
-    public List<Course> searchForCourses(String name, int schoolid, String teacherName, boolean online) throws SQLException {
-        String query  ="SELECT * FROM courses WHERE" +
-                        " (name LIKE ? or ? is null)" +
-                        " AND (schoolid = ? or ?=-1)" +
-                        " AND (id IN " +
-                            " (SELECT courseid FROM teachesat WHERE teacherid IN " +
-                                " (SELECT id FROM teachers WHERE name LIKE ?)) or ? is null)" +
-                        " AND (online = ?)";
+    public List<Course> searchForCourses(String name, int schoolid, String teacherName, boolean online, int pageNumber) throws SQLException {
+        int startingLimit = (pageNumber-1)*RESULTS_PER_PAGE;
+        int endingLimit = pageNumber*RESULTS_PER_PAGE-1;
+        String query  ="SELECT * FROM courses " +
+                        " WHERE" +
+                            " (name LIKE ? or ? is null)" +
+                            " AND (schoolid = ? or ?=-1)" +
+                            " AND (id IN " +
+                                " (SELECT courseid FROM teachesat WHERE teacherid IN " +
+                                    " (SELECT id FROM teachers WHERE name LIKE ?)) or ? is null)" +
+                            " AND (online = ?)" +
+                        " ORDER BY id"+
+                        " LIMIT "+startingLimit+","+ endingLimit;
         PreparedStatement stmt = conn.prepareStatement(query);
         if(name!=null) {
             stmt.setString(1, '%' + name + '%');
@@ -249,7 +256,7 @@ public class DatabaseHandler {
 
         List<Course> courses = new ArrayList<Course>();
         while(results.next()){
-            Course course = new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
+            Course course = new Course(results.getInt("id"),results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
             courses.add(course);
         }
         return courses;
@@ -272,6 +279,7 @@ public class DatabaseHandler {
         return courses;
 
     }
+
 
 
     //Bookmark
@@ -327,9 +335,9 @@ public class DatabaseHandler {
         stmt.setInt(1, review.getRating());
         stmt.setLong(2, review.getTime());
         stmt.setString(3, review.getText());
-        stmt.setString(4, review.getUserEmail());
-        stmt.setInt(5, review.getCourseid());
-        stmt.setInt(6, review.getTeacherid());
+        stmt.setString(4, review.userEmail());
+        stmt.setInt(5, review.courseid());
+        stmt.setInt(6, review.teacherid());
 
         stmt.executeUpdate();
 
@@ -425,7 +433,7 @@ public class DatabaseHandler {
                         " WHERE name LIKE ?";
 
         PreparedStatement stmt =  conn.prepareStatement(query);
-        stmt.setString(1,startingString+'%');
+        stmt.setString(1, startingString + '%');
         ResultSet results = stmt.executeQuery();
 
         List<Teacher> teachers = new ArrayList<Teacher>();
@@ -439,7 +447,8 @@ public class DatabaseHandler {
     }
 
     public Teacher getTeacherById(int id) throws SQLException{
-        String query = "SELECT * FROM teachers" +
+        String query = "SELECT *" +
+                " FROM teachers" +
                 " WHERE id=?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -449,6 +458,20 @@ public class DatabaseHandler {
             return null;
         }
         return new Teacher(result.getInt("id"), result.getString("name"));
+    }
+
+    //School
+    public School getSchoolById(int id) throws SQLException{
+        String query =
+                "SELECT *" +
+                " FROM schools" +
+                " WHERE id=?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, id);
+        ResultSet result = stmt.executeQuery();
+        result.next();
+        return new School(result.getString("name"));
     }
 
 

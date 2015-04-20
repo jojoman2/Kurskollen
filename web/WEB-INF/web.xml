@@ -36,11 +36,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>GetCourseReviews</servlet-name>
-        <servlet-class>Servletts.GetCoursereviews</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>GetMyReviews</servlet-name>
         <servlet-class>Servletts.GetMyReviews</servlet-class>
     </servlet>
@@ -103,10 +98,6 @@
         <url-pattern>/add-course</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>GetCourseReviews</servlet-name>
-        <url-pattern>/get-course-reviews</url-pattern>
-    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>GetMyReviews</servlet-name>

@@ -5,6 +5,7 @@ package Beans;
  */
 public class Course {
 
+    private int courseId;
     private String courseCode;
     private String name;
     private String description;
@@ -21,6 +22,15 @@ public class Course {
         this.online = online;
         this.link = link;
         this.schoolId = schoolId;
+    }
+
+    public Course(int courseId,String courseCode, String name, String description, float credits, boolean online, String link, int schoolId){
+        this(courseCode, name, description ,credits ,online, link, schoolId);
+        this.courseId = courseId;
+    }
+
+    public int courseId(){
+        return courseId;
     }
 
     public String getCourseCode() {
@@ -47,7 +57,9 @@ public class Course {
         return link;
     }
 
-    public int getSchoolId() {
+    public int schoolId() {
         return schoolId;
     }
+
+
 }

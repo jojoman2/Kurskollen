@@ -1,7 +1,8 @@
 package Servletts;
 
-import Beans.Course;
+import Beans.*;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -45,18 +46,73 @@ public class SearchForCourse extends HttpServlet {
             String onlineString = req.getParameter("online");
             boolean online = onlineString != null && onlineString.equals("1");
 
-
-            List<Course> courses = db.searchForCourses(req.getParameter("name"), schoolid, req.getParameter("teacher"), online);
-            JSONArray courseJson = new JSONArray();
-            for (Course course : courses) {
-                courseJson.put(new JSONObject(course));
+            String pageNumberString = req.getParameter("page");
+            int pageNumber;
+            if (pageNumberString == null) {
+                pageNumber = 1;
             }
-            writer.print(courseJson.toString());
+            else{
+                pageNumber = Integer.parseInt(pageNumberString);
+                if(pageNumber<=0){
+                    throw(new NumberFormatException("Page number lower than or equal to 0"));
+                }
+            }
 
+
+            List<Course> courses = db.searchForCourses(req.getParameter("name"), schoolid, req.getParameter("teacher"), online , pageNumber);
+            JSONArray coursesJson = new JSONArray();
+            for (Course course : courses) {
+                JSONObject courseJson = new JSONObject(course);
+                courseJson.remove("class");
+                coursesJson.put(courseJson);
+
+                int courseId = course.courseId();
+
+                //Get reviews
+                List<Review> reviews = db.getReviewsByCourse(courseId);
+
+                if (!reviews.isEmpty()) {
+
+                    JSONArray reviewsJson = new JSONArray();
+                    int sumOfReviewRatings = 0;
+                    for (Review review : reviews) {
+                        JSONObject jsonReview = new JSONObject(review);
+                        jsonReview.remove("class");
+
+                        //Get the name of the user
+                        User postingUser = db.getUserInfo(review.userEmail());
+                        jsonReview.put("user", postingUser.getName());
+
+                        //Get the name of the teacher
+                        int teacherId = review.teacherid();
+                        Teacher teacher = db.getTeacherById(teacherId);
+                        jsonReview.put("teacher", teacher.getName());
+
+
+                        reviewsJson.put(jsonReview);
+                        sumOfReviewRatings += review.getRating();
+                    }
+
+
+                    float meanReviewRating = ((float) sumOfReviewRatings) / reviews.size();
+                    courseJson.put("meanRating", meanReviewRating);
+                    courseJson.put("reviews", reviewsJson);
+                }
+
+
+                School school = db.getSchoolById(course.schoolId());
+                courseJson.put("school", school.getName());
+            }
+            writer.print(coursesJson.toString());
+        } catch(NumberFormatException e) {
+            resp.setStatus(400);
         } catch (ClassNotFoundException e) {
             resp.setStatus(500);
             e.printStackTrace();
         } catch (SQLException e) {
+            resp.setStatus(500);
+            e.printStackTrace();
+        } catch (JSONException e) {
             resp.setStatus(500);
             e.printStackTrace();
         }

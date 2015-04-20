@@ -21,7 +21,7 @@ import java.util.List;
 public class GetCoursereviews extends HttpServlet {
 
 
-    //TEST ME PLZ!!!!!
+    //NOT NEEDED ANY MORE!!! DO NOT USE
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

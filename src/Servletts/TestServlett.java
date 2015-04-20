@@ -1,11 +1,17 @@
 package Servletts;
 
+import DatabaseStuff.DatabaseHandler;
+import DatabaseStuff.DbConnect;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Created by Fredrik on 2015-03-30.
@@ -17,6 +23,19 @@ public class TestServlett extends HttpServlet {
         resp.setContentType("text/plain; charset=UTF-8");
 
         PrintWriter writer = resp.getWriter();
-        writer.print(resp.getCharacterEncoding());
+        Connection conn;
+
+
+        try {
+            conn = DbConnect.getConnection();
+            DatabaseHandler db = new DatabaseHandler(conn);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
