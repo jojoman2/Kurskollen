@@ -361,8 +361,6 @@ public class DatabaseHandler {
             reviews.add(review);
         }
         return reviews;
-
-
     }
 
     public List<Review> getReviewsByUser(String userEmail) throws SQLException {

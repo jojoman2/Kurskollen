@@ -1,7 +1,8 @@
 package Servletts;
 
-import Beans.Course;
+import Beans.*;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import utils.ErrorChecker;
 
@@ -44,9 +45,24 @@ public class GetMyBookmarks extends HttpServlet {
                     List<Course> courses = db.listBookmarks(userEmail);
                     JSONArray reviewsJson = new JSONArray();
                     for (Course course : courses) {
-                        JSONObject courseJSON = new JSONObject(course);
-                        courseJSON.remove("class");
-                        reviewsJson.put(courseJSON);
+                        JSONObject courseJson = new JSONObject(course);
+                        courseJson.remove("class");
+                        reviewsJson.put(courseJson);
+
+                        School school = db.getSchoolById(course.schoolId());
+                        courseJson.put("school", school.getName());
+
+                        List<Review> reviews = db.getReviewsByCourse(course.courseId());
+
+                        if (!reviews.isEmpty()) {
+
+                            int sumOfReviewRatings = 0;
+                            for (Review review : reviews) {
+                                sumOfReviewRatings += review.getRating();
+                            }
+                            float meanReviewRating = ((float) sumOfReviewRatings) / reviews.size();
+                            courseJson.put("meanRating", meanReviewRating);
+                        }
                     }
 
                     writer.print(reviewsJson.toString());
@@ -56,6 +72,9 @@ public class GetMyBookmarks extends HttpServlet {
                 resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
+                resp.setStatus(500);
+                e.printStackTrace();
+            } catch (JSONException e) {
                 resp.setStatus(500);
                 e.printStackTrace();
             }
