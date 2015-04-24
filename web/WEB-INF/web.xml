@@ -51,6 +51,11 @@
     </servlet>
     
     <servlet>
+        <servlet-name>GetMyBookmars</servlet-name>
+        <servlet-class>Servletts.GetMyBookmarks</servlet-class>
+    </servlet>
+    
+    <servlet>
         <servlet-name>RemoveBookmark</servlet-name>
         <servlet-class>Servletts.RemoveBookmark</servlet-class>
     </servlet>
@@ -112,6 +117,11 @@
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>GetMyBookmars</servlet-name>
+        <url-pattern>/get-my-bookmarks</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
