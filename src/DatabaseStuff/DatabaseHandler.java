@@ -306,7 +306,7 @@ public class DatabaseHandler {
 
         List<Course> courses = new ArrayList<Course>();
         while(results.next()){
-            Course course=  new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"),results.getBoolean("online"), results.getString("link"), results.getInt("schoolId"));
+            Course course=  new Course(results.getInt("id"),results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"),results.getBoolean("online"), results.getString("link"), results.getInt("schoolId"));
             courses.add(course);
         }
         return courses;

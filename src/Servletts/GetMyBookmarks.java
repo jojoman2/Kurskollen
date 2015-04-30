@@ -25,7 +25,7 @@ public class GetMyBookmarks extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"userEmail", "loginsession"})) {
+        if (!ErrorChecker.checkParameters(req, new String[]{"email", "loginsession"})) {
             resp.setStatus(400);
         } else {
             PrintWriter writer = resp.getWriter();
@@ -34,7 +34,7 @@ public class GetMyBookmarks extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String userEmail = req.getParameter("userEmail");
+                String userEmail = req.getParameter("email");
                 String loginsession = req.getParameter("loginsession");
 
                 if(!db.checkLoginSession(userEmail,loginsession)) {
@@ -43,11 +43,11 @@ public class GetMyBookmarks extends HttpServlet {
                 else {
 
                     List<Course> courses = db.listBookmarks(userEmail);
-                    JSONArray reviewsJson = new JSONArray();
+                    JSONArray coursesJson = new JSONArray();
                     for (Course course : courses) {
                         JSONObject courseJson = new JSONObject(course);
                         courseJson.remove("class");
-                        reviewsJson.put(courseJson);
+                        courseJson.put("courseId",course.courseId());
 
                         School school = db.getSchoolById(course.schoolId());
                         courseJson.put("school", school.getName());
@@ -63,9 +63,10 @@ public class GetMyBookmarks extends HttpServlet {
                             float meanReviewRating = ((float) sumOfReviewRatings) / reviews.size();
                             courseJson.put("meanRating", meanReviewRating);
                         }
+                        coursesJson.put(courseJson);
                     }
 
-                    writer.print(reviewsJson.toString());
+                    writer.print(coursesJson.toString());
                 }
 
             } catch (ClassNotFoundException e) {
