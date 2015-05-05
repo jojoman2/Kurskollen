@@ -37,6 +37,7 @@ public class GetTeacherByStartingString extends HttpServlet {
                 for(Teacher teacher : teachers){
                     JSONObject teacherJSON = new JSONObject(teacher);
                     teacherJSON.remove("class");
+                    teachersJSON.put(teacherJSON);
                 }
 
                 writer.print(teachersJSON.toString());
