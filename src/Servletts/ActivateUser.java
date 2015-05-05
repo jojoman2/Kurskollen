@@ -20,7 +20,10 @@ public class ActivateUser extends HttpServlet {
 
         resp.setContentType("application/json; charset=UTF-8");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"email", "activationcode"})) {
+        String email = req.getParameter("email");
+        String activationCode = req.getParameter("activationcode");
+
+        if (!ErrorChecker.checkNotNull(new String[]{email, activationCode})) {
             resp.setStatus(400);
         } else {
 
@@ -28,7 +31,7 @@ public class ActivateUser extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                boolean activate = db.activateUser(req.getParameter("email"), req.getParameter("activationcode"));
+                boolean activate = db.activateUser(email, activationCode);
                 if (!activate) {
                     resp.setStatus(401);
                 }

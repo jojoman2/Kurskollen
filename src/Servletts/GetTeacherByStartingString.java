@@ -1,6 +1,6 @@
 package Servletts;
 
-import Beans.Review;
+import Beans.Teacher;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import utils.ErrorChecker;
@@ -15,44 +15,33 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by Fredrik on 2015-03-19.
- */
-public class GetMyReviews extends HttpServlet {
+
+public class GetTeacherByStartingString extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json; charset=UTF-8");
 
-        String userEmail = req.getParameter("email");
-        String loginsession = req.getParameter("loginsession");
-
-        if (!ErrorChecker.checkNotNull(new String[]{userEmail,loginsession})) {
+        String teacherStarting = req.getParameter("teacherStarting");
+        if (!ErrorChecker.checkNotNull(new String[]{teacherStarting})) {
             resp.setStatus(400);
         } else {
+
             PrintWriter writer = resp.getWriter();
 
             try {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
+                List<Teacher> teachers = db.getTeachersByStartingString(teacherStarting);
 
-
-
-                if(!db.checkLoginSession(userEmail,loginsession)) {
-                    resp.setStatus(401);
+                JSONArray teachersJSON = new JSONArray();
+                for(Teacher teacher : teachers){
+                    JSONObject teacherJSON = new JSONObject(teacher);
+                    teacherJSON.remove("class");
                 }
-                else {
 
-                    List<Review> reviews = db.getReviewsByUser(userEmail);
-                    JSONArray reviewsJson = new JSONArray();
-                    for (Review review : reviews) {
-                        JSONObject reviewObject = new JSONObject(review);
-                        reviewObject.remove("class");
-                        reviewsJson.put(reviewObject);
-                    }
+                writer.print(teachersJSON.toString());
 
-                    writer.print(reviewsJson.toString());
-                }
+
 
             } catch (ClassNotFoundException e) {
                 resp.setStatus(500);
@@ -62,5 +51,6 @@ public class GetMyReviews extends HttpServlet {
                 e.printStackTrace();
             }
         }
+
     }
 }

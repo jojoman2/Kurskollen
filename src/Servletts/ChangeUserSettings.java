@@ -10,34 +10,36 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * Created by Fredrik on 2015-03-19.
- */
+
 public class ChangeUserSettings extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
+        String email = req.getParameter("email");
+        String loginSession = req.getParameter("loginsession");
+        String newName = req.getParameter("newName");
+        String newPassword = req.getParameter("newPassword");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"email", "loginsession"})) {
+
+        if (!ErrorChecker.checkNotNull(new String[]{email, loginSession})) {
             resp.setStatus(400);
         }
         else {
 
-            Connection conn = null;
+
             try {
-                conn = DatabaseStuff.DbConnect.getConnection();
+                Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String email = req.getParameter("email");
-                String loginSession = req.getParameter("loginsession");
+
 
                 if (!db.checkLoginSession(email, loginSession)) {
                     resp.setStatus(401);
                 }
                 else {
-                    db.changeUserDetails(email, req.getParameter("newName"), req.getParameter("newPassword"));
+                    db.changeUserDetails(email, newName, newPassword);
                     resp.setStatus(200);
                 }
 

@@ -27,7 +27,9 @@ public class GetCoursereviews extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"courseid"})) {
+        String courseIdString = req.getParameter("courseid");
+
+        if (!ErrorChecker.checkNotNull(new String[]{courseIdString})) {
             resp.setStatus(400);
         } else {
 
@@ -37,7 +39,7 @@ public class GetCoursereviews extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String courseIdString = req.getParameter("courseid");
+
                 int courseid = Integer.parseInt(courseIdString);
 
 

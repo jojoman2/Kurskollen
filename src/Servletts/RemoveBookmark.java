@@ -21,12 +21,15 @@ public class RemoveBookmark extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"courseid", "email", "loginsession"})) {
+        String email = req.getParameter("email");
+        String loginSession = req.getParameter("loginsession");
+        String courseIdString = req.getParameter("courseid");
+
+        if (!ErrorChecker.checkNotNull(new String[]{courseIdString, email, loginSession})) {
             resp.setStatus(400);
         } else {
 
-            String email = req.getParameter("email");
-            String loginSession = req.getParameter("loginsession");
+
 
 
             try {
@@ -38,7 +41,7 @@ public class RemoveBookmark extends HttpServlet{
                 }
                 else {
                     try {
-                        db.removeBookmark(Integer.parseInt(req.getParameter("courseid")), email);
+                        db.removeBookmark(Integer.parseInt(courseIdString), email);
                         resp.setStatus(204);
                     } catch (NumberFormatException e) {
                         resp.setStatus(400);

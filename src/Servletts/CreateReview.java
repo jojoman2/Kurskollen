@@ -21,7 +21,15 @@ public class CreateReview extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","rating", "courseid","teacherid","text"})) {
+        String email = req.getParameter("email");
+        String loginSession = req.getParameter("loginsession");
+        String ratingString = req.getParameter("rating");
+        String courseIdString = req.getParameter("courseid");
+        String teacherIdString = req.getParameter("teacherid");
+        String text = req.getParameter("text");
+
+
+        if (!ErrorChecker.checkNotNull(new String[]{email,loginSession,ratingString, courseIdString,teacherIdString,text})) {
             resp.setStatus(400);
         } else {
 
@@ -29,17 +37,13 @@ public class CreateReview extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String email = req.getParameter("email");
-                String loginSession = req.getParameter("loginsession");
 
                 if(!db.checkLoginSession(email, loginSession)){
                     resp.setStatus(401);
                 }
                 else {
 
-                    String ratingString = req.getParameter("rating");
-                    String courseIdString = req.getParameter("courseid");
-                    String teacherIdString = req.getParameter("teacherid");
+
 
                     int rating = Integer.parseInt(ratingString);
                     int courseid = Integer.parseInt(courseIdString);
@@ -50,7 +54,7 @@ public class CreateReview extends HttpServlet {
                         throw(new RuntimeException(""+rating));
                     }
                     else {
-                        Review review = new Review(System.currentTimeMillis() / 1000, rating, req.getParameter("text"), req.getParameter("email"), courseid, teacherid);
+                        Review review = new Review(System.currentTimeMillis() / 1000, rating, text, email, courseid, teacherid);
                         db.addReview(review);
                         resp.setStatus(201);
                     }

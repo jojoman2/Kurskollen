@@ -28,18 +28,19 @@ public class GetTeacherInfo extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         resp.setContentType("application/json; charset=UTF-8");
+        String teacherIdString = req.getParameter("teacherid");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"teacherid"})) {
+        if (!ErrorChecker.checkNotNull(new String[]{teacherIdString})) {
             resp.setStatus(400);
         } else {
-            Connection conn = null;
+
             PrintWriter writer = resp.getWriter();
 
             try {
-                conn = DatabaseStuff.DbConnect.getConnection();
+                Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String teacherIdString = req.getParameter("teacherid");
+
                 int teacherid = Integer.parseInt(teacherIdString);
 
 

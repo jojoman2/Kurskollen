@@ -30,23 +30,29 @@ public class SearchForCourse extends HttpServlet {
 
         resp.setContentType("application/json; charset=UTF-8");
 
-        Connection conn = null;
+        //All optional
+        String schoolidString = req.getParameter("schoolid");
+        String onlineString = req.getParameter("online");
+        String pageNumberString = req.getParameter("page");
+        String name = req.getParameter("name");
+        String teacherString = req.getParameter("teacher");
+
         PrintWriter writer = resp.getWriter();
         try {
-            conn = DatabaseStuff.DbConnect.getConnection();
+            Connection conn = DatabaseStuff.DbConnect.getConnection();
             DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
 
-            String schoolidString = req.getParameter("schoolid");
+
             int schoolid = -1;
             if (schoolidString != null) {
                 schoolid = Integer.parseInt(schoolidString);
             }
 
-            String onlineString = req.getParameter("online");
+
             boolean online = onlineString != null && onlineString.equals("1");
 
-            String pageNumberString = req.getParameter("page");
+
             int pageNumber;
             if (pageNumberString == null) {
                 pageNumber = 1;
@@ -59,14 +65,15 @@ public class SearchForCourse extends HttpServlet {
             }
 
 
-            List<Course> courses = db.searchForCourses(req.getParameter("name"), schoolid, req.getParameter("teacher"), online , pageNumber);
+            List<Course> courses = db.searchForCourses(name, schoolid,teacherString, online , pageNumber);
             JSONArray coursesJson = new JSONArray();
             for (Course course : courses) {
                 JSONObject courseJson = new JSONObject(course);
                 courseJson.remove("class");
-                coursesJson.put(courseJson);
 
                 int courseId = course.courseId();
+
+                courseJson.put("id",courseId);
 
                 //Get reviews
                 List<Review> reviews = db.getReviewsByCourse(courseId);
@@ -97,11 +104,15 @@ public class SearchForCourse extends HttpServlet {
                     float meanReviewRating = ((float) sumOfReviewRatings) / reviews.size();
                     courseJson.put("meanRating", meanReviewRating);
                     courseJson.put("reviews", reviewsJson);
+
+
                 }
 
 
                 School school = db.getSchoolById(course.schoolId());
                 courseJson.put("school", school.getName());
+
+                coursesJson.put(courseJson);
             }
             writer.print(coursesJson.toString());
         } catch(NumberFormatException e) {

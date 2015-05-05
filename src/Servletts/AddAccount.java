@@ -35,7 +35,11 @@ public class AddAccount extends HttpServlet {
         resp.setContentType("text/plain; charset=UTF-8");
         PrintWriter writer = resp.getWriter();
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"email", "name", "password"})) {
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
+
+        if (!ErrorChecker.checkNotNull(new String[]{name, email, password})) {
             resp.setStatus(400);
             //writer.print(Boolean.toString(req.getParameter("email") == null)+" "+Boolean.toString(req.getParameter("name") == null)+" "+Boolean.toString(req.getParameter("password") == null));
         }
@@ -47,12 +51,6 @@ public class AddAccount extends HttpServlet {
             try {
                 conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
-
-
-                String name = req.getParameter("name");
-
-                String email = req.getParameter("email");
-                String password = req.getParameter("password");
 
 
 

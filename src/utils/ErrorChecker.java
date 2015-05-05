@@ -9,10 +9,9 @@ import java.util.regex.Pattern;
  */
 public class ErrorChecker {
 
-    /*Checks that all the request sent in has all the parameters in the string array*/
-    public static boolean checkParameters(HttpServletRequest req, String[] parameterNames){
-        for(String paramaterName : parameterNames){
-            if (req.getParameter(paramaterName) ==null){
+    public static boolean checkNotNull(String[] parameters){
+        for(String parameter : parameters){
+            if(parameter == null){
                 return false;
             }
         }

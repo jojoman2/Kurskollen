@@ -21,7 +21,17 @@ public class AddCourse extends HttpServlet {
 
         resp.setContentType("application/json; charset=UTF-8");
 
-        if (!ErrorChecker.checkParameters(req, new String[]{"email","loginsession","coursecode", "name", "credits", "online", "schoolid" })) {
+        String email = req.getParameter("email");
+        String loginsession = req.getParameter("loginsession");
+        String creditsString = req.getParameter("credits");
+        String schoolIdString = req.getParameter("schoolid");
+        String courseCode = req.getParameter("coursecode");
+        String name = req.getParameter("name");
+        String description = req.getParameter("description");
+        String link = req.getParameter("link");
+        String onlineString = req.getParameter("online");
+
+        if (!ErrorChecker.checkNotNull(new String[]{email,loginsession,courseCode, name, creditsString, onlineString, schoolIdString })) {
             resp.setStatus(400);
         } else {
 
@@ -29,25 +39,24 @@ public class AddCourse extends HttpServlet {
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                String email = req.getParameter("email");
-                String loginsession = req.getParameter("loginsession");
+
 
                 if(!db.checkLoginSession(email,loginsession)) {
                     resp.setStatus(401);
                 }
                 else{
-                    String creditsString = req.getParameter("credits");
+
                     float credits = Float.parseFloat(creditsString);
 
 
-                    String schoolIdString = req.getParameter("schoolid");
+
                     int schoolid = Integer.parseInt(schoolIdString);
 
 
-                    String onlineString = req.getParameter("online");
+
                     boolean online = onlineString.equals("1");
 
-                    Course course = new Course(req.getParameter("coursecode"), req.getParameter("name"), req.getParameter("description"), credits, online, req.getParameter("link"), schoolid);
+                    Course course = new Course(courseCode, name, description, credits, online, link, schoolid);
                     db.addCourse(course);
                 }
 

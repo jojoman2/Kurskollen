@@ -23,22 +23,23 @@ public class Login extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
 
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
+
 
         //Check if the login was correct and if so send a loginsession id to the client
-        if (!ErrorChecker.checkParameters(req, new String[]{"email", "password"})) {
+        if (!ErrorChecker.checkNotNull(new String[]{email, password})) {
             resp.setStatus(400);
         }
         else {
             try {
                 Connection conn  = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
-                String email = req.getParameter("email");
-                String password = req.getParameter("password");
-                System.out.println("email: "+email+" password: "+password);
+
                 boolean checkLogin = db.checkUser(email,password);
-                System.out.println("checkLogin: " + Boolean.toString(checkLogin));
+
                 boolean checkActivated = db.isActivated(email);
-                System.out.println("checkActivated: " + Boolean.toString(checkActivated));
+
                 if (checkLogin && checkActivated){
                     String loginsession = General.randomString(25);
                     writer.print(loginsession);
