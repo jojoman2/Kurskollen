@@ -64,6 +64,11 @@
         <servlet-name>TestServlet</servlet-name>
         <servlet-class>Servletts.TestServlett</servlet-class>
     </servlet>
+    
+    <servlet>
+        <servlet-name>GetTeacherByStartingString</servlet-name>
+        <servlet-class>Servletts.GetTeacherByStartingString</servlet-class>
+    </servlet>
 
 
 
@@ -132,5 +137,10 @@
     <servlet-mapping>
         <servlet-name>TestServlet</servlet-name>
         <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>GetTeacherByStartingString</servlet-name>
+        <url-pattern>/get-teacher-by-starting-string</url-pattern>
     </servlet-mapping>
 </web-app>

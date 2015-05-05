@@ -280,6 +280,20 @@ public class DatabaseHandler {
 
     }
 
+    public Course getCourseById(int id) throws SQLException {
+        String query = "SELECT * FROM courses" +
+                " WHERE id=?" +
+                " LIMIT 1";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, id);
+
+        ResultSet results = stmt.executeQuery();
+        results.next();
+
+        return new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
+
+    }
+
 
 
     //Bookmark
