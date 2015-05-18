@@ -3,6 +3,7 @@ package Servletts;
 import Beans.Course;
 import Beans.Review;
 import Beans.School;
+import Beans.Teacher;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -51,6 +52,9 @@ public class GetMyReviews extends HttpServlet {
                     for (Review review : reviews) {
                         JSONObject reviewJson = new JSONObject(review);
                         reviewJson.remove("class");
+
+                        Teacher teacher = db.getTeacherById(review.teacherid());
+                        reviewJson.put("teacherName",teacher.getName());
 
                         Course course = db.getCourseById(review.courseid());
                         reviewJson.put("courseName", course.getName());
