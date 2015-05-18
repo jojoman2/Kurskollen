@@ -54,6 +54,7 @@ public class GetMyReviews extends HttpServlet {
                         reviewJson.remove("class");
 
                         Teacher teacher = db.getTeacherById(review.teacherid());
+                        reviewJson.put("teacherId",teacher.getId());
                         reviewJson.put("teacherName",teacher.getName());
 
                         Course course = db.getCourseById(review.courseid());
