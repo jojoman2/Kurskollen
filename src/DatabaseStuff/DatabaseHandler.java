@@ -395,6 +395,16 @@ public class DatabaseHandler {
 
     }
 
+    public void removeReview(int reviewId) throws SQLException {
+        String query = "" +
+                "DELETE FROM reviews" +
+                " WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1,reviewId);
+
+        stmt.executeUpdate();
+    }
+
 
     //Teacher
 
@@ -404,7 +414,7 @@ public class DatabaseHandler {
                 " VALUES (?)";
 
         PreparedStatement stmt = conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1,teacher.getName());
+        stmt.setString(1, teacher.getName());
         stmt.executeUpdate();
         ResultSet result = stmt.getGeneratedKeys();
         result.next();

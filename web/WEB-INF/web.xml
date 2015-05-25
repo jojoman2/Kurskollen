@@ -70,6 +70,11 @@
         <servlet-class>Servletts.GetTeacherByStartingString</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>RemoveReview</servlet-name>
+        <servlet-class>Servletts.RemoveReview</servlet-class>
+    </servlet>
+
 
 
     
@@ -143,4 +148,10 @@
         <servlet-name>GetTeacherByStartingString</servlet-name>
         <url-pattern>/get-teacher-by-starting-string</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RemoveReview</servlet-name>
+        <url-pattern>/remove-review</url-pattern>
+    </servlet-mapping>
+
 </web-app>
