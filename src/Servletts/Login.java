@@ -43,9 +43,6 @@ public class Login extends HttpServlet {
                     String loginsession = General.randomString(25);
                     writer.print(loginsession);
                     db.updateLoginSession(email, loginsession);
-                }else if(checkLogin){
-                    writer.print("user-not-activated");
-                    resp.setStatus(401);
                 } else{
                     writer.print("wrong-email-or-password");
                     resp.setStatus(401);
