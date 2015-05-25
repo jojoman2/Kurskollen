@@ -53,7 +53,7 @@ public class EditReview extends HttpServlet {
                     else{
                         teacherId = db.addTeacher(new Teacher(teacherName));
                     }
-                    
+
 
 
                     int reviewId = Integer.parseInt(reviewIdString);

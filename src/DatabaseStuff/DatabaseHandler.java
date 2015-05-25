@@ -212,7 +212,7 @@ public class DatabaseHandler {
 
     public List<Course> getCoursesByTeacher(int teacherId) throws SQLException {
         String query  = "SELECT * FROM courses" +
-                        " WHERE id = (SELECT courseid FROM teachesat WHERE teacherid = ?)";
+                        " WHERE id IN (SELECT DISTINCT courseid FROM reviews WHERE teacherid = ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, teacherId);
