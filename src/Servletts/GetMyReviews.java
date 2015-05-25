@@ -31,7 +31,7 @@ public class GetMyReviews extends HttpServlet {
         String userEmail = req.getParameter("email");
         String loginsession = req.getParameter("loginsession");
 
-        if (!ErrorChecker.checkNotNull(new String[]{userEmail,loginsession})) {
+        if (!ErrorChecker.checkNotNull(new String[]{userEmail, loginsession})) {
             resp.setStatus(400);
         } else {
             PrintWriter writer = resp.getWriter();
@@ -58,6 +58,7 @@ public class GetMyReviews extends HttpServlet {
                         reviewJson.put("teacherName",teacher.getName());
 
                         Course course = db.getCourseById(review.courseid());
+                        reviewsJson.put("courseid", review.courseid());
                         reviewJson.put("courseName", course.getName());
 
                         School school = db.getSchoolById(course.schoolId());
