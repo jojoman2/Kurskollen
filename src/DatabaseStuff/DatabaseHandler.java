@@ -20,70 +20,17 @@ public class DatabaseHandler {
 
     //User
 
-    public void addUser(String email, String name, String password, String activationCode) throws SQLException {
+    public void addUser(String email, String name, String password) throws SQLException {
         String hashedPassword = BCrypt.hashpw(password,BCrypt.gensalt());
         String query =
-                "INSERT INTO users(email,name,passwordhash,activationcode)" +
-                " VALUES(?,?,?,?)";
+                "INSERT INTO users(email,name,passwordhash)" +
+                " VALUES(?,?,?)";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1,email);
         stmt.setString(2,name);
         stmt.setString(3,hashedPassword);
-        stmt.setString(4,activationCode);
         stmt.executeUpdate();
     }
-
-    public boolean activateUser(String userEmail, String enteredActivationCode) throws SQLException {
-        String selectQuery =
-                "SELECT activationcode"+
-                " FROM users"+
-                " WHERE email=?";
-        PreparedStatement selectStmt = conn.prepareStatement(selectQuery);
-        selectStmt.setString(1, userEmail);
-        ResultSet result = selectStmt.executeQuery();
-        result.next();
-        String activationCode = result.getString("activationcode");
-
-        //Equals which stops any attacker from measuring the time taken to compare to figure out the activation code:
-        if(enteredActivationCode.length()!=activationCode.length()){
-            return false;
-        }
-        boolean equals = true;
-        for(int i=0;i<enteredActivationCode.length();i++){
-            if(enteredActivationCode.charAt(i)!=activationCode.charAt(i)){
-                equals = false;
-            }
-        }
-        if(!equals){
-            return false;
-        }
-
-        String updateQuery =
-                "UPDATE users"+
-                " SET activated=1, activationcode = NULL" +
-                " WHERE email=?";
-        PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
-        updateStmt.setString(1, userEmail);
-        updateStmt.executeUpdate();
-        return true;
-
-    }
-
-    public boolean isActivated(String email) throws SQLException {
-        String query =  "SELECT activated FROM users" +
-                " WHERE email = ?";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, email);
-        ResultSet result = stmt.executeQuery();
-        if(!result.next()){
-            return false;
-        }
-        return result.getBoolean("activated");
-
-
-    }
-
 
     public boolean checkUser(String email, String password) throws SQLException {
         String query =

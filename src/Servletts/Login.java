@@ -38,9 +38,8 @@ public class Login extends HttpServlet {
 
                 boolean checkLogin = db.checkUser(email,password);
 
-                boolean checkActivated = db.isActivated(email);
 
-                if (checkLogin && checkActivated){
+                if (checkLogin){
                     String loginsession = General.randomString(25);
                     writer.print(loginsession);
                     db.updateLoginSession(email, loginsession);

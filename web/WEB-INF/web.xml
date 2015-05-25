@@ -26,11 +26,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>ActivateUser</servlet-name>
-        <servlet-class>Servletts.ActivateUser</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>AddCourse</servlet-name>
         <servlet-class>Servletts.AddCourse</servlet-class>
     </servlet>
@@ -105,11 +100,6 @@
     <servlet-mapping>
         <servlet-name>ChangeUserSettings</servlet-name>
         <url-pattern>/change-user-setting</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>ActivateUser</servlet-name>
-        <url-pattern>/activate-user</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>

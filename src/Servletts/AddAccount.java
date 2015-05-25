@@ -66,11 +66,7 @@ public class AddAccount extends HttpServlet {
                 }
 
                 if (addAccount) {
-                    //generate activation code
-                    String activationCode = General.randomString(20);
-
-                    db.addUser(email, name, password, activationCode);
-                    EmailSender.sendEmail(email, name, activationCode);
+                    db.addUser(email, name, password);
                     resp.setStatus(201);
 
                 } else {

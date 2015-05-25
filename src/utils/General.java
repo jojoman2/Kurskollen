@@ -1,5 +1,6 @@
 package utils;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Random;
 public class General {
 
     private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private static Random rnd = new Random();
+    private static Random rnd = new SecureRandom();
 
     public static String randomString(int len)
     {
