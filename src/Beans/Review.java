@@ -5,6 +5,7 @@ package Beans;
  */
 public class Review {
 
+    private int reviewId;
     private long time;
     private int rating;
     private String text;
@@ -21,6 +22,17 @@ public class Review {
         this.teacherid = teacherid;
     }
 
+    public Review(int id,long time, int rating, String text, String useremail, int courseid, int teacherid) {
+        this.reviewId = id;
+        this.time = time;
+        this.rating = rating;
+        this.text = text;
+        this.useremail = useremail;
+        this.courseid = courseid;
+        this.teacherid = teacherid;
+    }
+
+
     public long getTime() {
         return time;
     }
@@ -35,6 +47,10 @@ public class Review {
 
     public String userEmail(){
         return useremail;
+    }
+
+    public int reviewId(){
+        return reviewId;
     }
 
     public int courseid() {

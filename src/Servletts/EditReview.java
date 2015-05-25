@@ -1,6 +1,7 @@
 package Servletts;
 
 import Beans.Review;
+import Beans.Teacher;
 import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
@@ -26,11 +27,11 @@ public class EditReview extends HttpServlet {
         String loginSession = req.getParameter("loginsession");
         String ratingString = req.getParameter("rating");
         String courseIdString = req.getParameter("courseid");
-        String teacherIdString = req.getParameter("teacherid");
+        String teacherName = req.getParameter("teacher");
         String text = req.getParameter("text");
 
 
-        if (!ErrorChecker.checkNotNull(new String[]{reviewIdString,username,loginSession,ratingString, courseIdString,teacherIdString,text})) {
+        if (!ErrorChecker.checkNotNull(new String[]{reviewIdString,username,loginSession,ratingString, courseIdString,teacherName,text})) {
             resp.setStatus(400);
         } else {
 
@@ -44,11 +45,20 @@ public class EditReview extends HttpServlet {
                 }
                 else {
 
+                    Teacher teacher = db.getTeacherByName(teacherName);
+                    int teacherId;
+                    if(teacher != null){
+                        teacherId = teacher.getId();
+                    }
+                    else{
+                        teacherId = db.addTeacher(new Teacher(teacherName));
+                    }
+                    
+
 
                     int reviewId = Integer.parseInt(reviewIdString);
                     int rating = Integer.parseInt(ratingString);
                     int courseid = Integer.parseInt(courseIdString);
-                    int teacherid = Integer.parseInt(teacherIdString);
 
 
 
@@ -64,7 +74,7 @@ public class EditReview extends HttpServlet {
                             resp.setStatus(401);
                         }
                         else {
-                            Review review = new Review(System.currentTimeMillis() / 1000, rating, text, username, courseid, teacherid);
+                            Review review = new Review(System.currentTimeMillis() / 1000, rating, text, username, courseid, teacherId);
                             db.editReview(reviewId, review);
                             resp.setStatus(201);
                         }

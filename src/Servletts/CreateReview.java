@@ -1,6 +1,7 @@
 package Servletts;
 
 import Beans.Review;
+import Beans.Teacher;
 import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
@@ -12,9 +13,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * Created by Fredrik on 2015-03-19.
- */
 public class CreateReview extends HttpServlet {
 
     @Override
@@ -25,11 +23,11 @@ public class CreateReview extends HttpServlet {
         String loginSession = req.getParameter("loginsession");
         String ratingString = req.getParameter("rating");
         String courseIdString = req.getParameter("courseid");
-        String teacherIdString = req.getParameter("teacherid");
+        String teacherName = req.getParameter("teacher");
         String text = req.getParameter("text");
 
 
-        if (!ErrorChecker.checkNotNull(new String[]{username,loginSession,ratingString, courseIdString,teacherIdString,text})) {
+        if (!ErrorChecker.checkNotNull(new String[]{username,loginSession,ratingString, courseIdString,teacherName,text})) {
             resp.setStatus(400);
         } else {
 
@@ -43,17 +41,24 @@ public class CreateReview extends HttpServlet {
                 }
                 else {
 
+                    Teacher teacher = db.getTeacherByName(teacherName);
+                    int teacherId;
+                    if(teacher != null){
+                        teacherId = teacher.getId();
+                    }
+                    else{
+                        teacherId = db.addTeacher(new Teacher(teacherName));
+                    }
 
 
                     int rating = Integer.parseInt(ratingString);
                     int courseid = Integer.parseInt(courseIdString);
-                    int teacherid = Integer.parseInt(teacherIdString);
 
                     if(rating>5||rating<0){
                         resp.setStatus(400);
                     }
                     else {
-                        Review review = new Review(System.currentTimeMillis() / 1000, rating, text, username, courseid, teacherid);
+                        Review review = new Review(System.currentTimeMillis() / 1000, rating, text, username, courseid, teacherId);
                         db.addReview(review);
                         resp.setStatus(201);
                     }

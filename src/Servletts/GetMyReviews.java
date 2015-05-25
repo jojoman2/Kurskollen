@@ -49,6 +49,7 @@ public class GetMyReviews extends HttpServlet {
                     for (Review review : reviews) {
                         JSONObject reviewJson = new JSONObject(review);
                         reviewJson.remove("class");
+                        reviewJson.put("reviewId",review.reviewId());
 
                         Teacher teacher = db.getTeacherById(review.teacherid());
                         reviewJson.put("teacherId",teacher.getId());

@@ -245,7 +245,7 @@ public class DatabaseHandler {
 
     //Bookmark
     public void addBookmark(int course, String userEmail) throws SQLException {
-        String query = "INSERT INTO savedcourse(courseid, useremail)"+
+        String query = "INSERT INTO savedcourse(courseid, username)"+
                         " VALUES (?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -258,7 +258,7 @@ public class DatabaseHandler {
 
     public List<Course> listBookmarks(String userEmail) throws SQLException {
         String query = "SELECT * FROM courses WHERE id IN (SELECT courseid FROM savedcourse" +
-                        " WHERE useremail = ?)";
+                        " WHERE username = ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, userEmail);
@@ -277,7 +277,7 @@ public class DatabaseHandler {
 
     public void removeBookmark(int course, String userEmail) throws SQLException {
         String query = "DELETE FROM savedcourse" +
-                        " WHERE courseid = ? AND useremail = ?";
+                        " WHERE courseid = ? AND username = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, course);
@@ -336,7 +336,7 @@ public class DatabaseHandler {
 
         List<Review> reviews = new ArrayList<Review>();
         while(results.next()){
-            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getString("useremail"), results.getInt("courseid"), results.getInt("teacherid"));
+            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getString("username"), results.getInt("courseid"), results.getInt("teacherid"));
             reviews.add(review);
         }
         return reviews;
@@ -353,7 +353,7 @@ public class DatabaseHandler {
 
         List<Review> reviews = new ArrayList<Review>();
         while(results.next()){
-            Review review  = new Review(results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getString("useremail"), results.getInt("courseid"), results.getInt("teacherid"));
+            Review review  = new Review(results.getInt("id"),results.getLong("time"),results.getInt("rating"), results.getString("text"), results.getString("username"), results.getInt("courseid"), results.getInt("teacherid"));
             reviews.add(review);
         }
         return reviews;
@@ -371,7 +371,7 @@ public class DatabaseHandler {
         if(!result.next()){
             return null;
         }
-        return result.getString("useremail");
+        return result.getString("username");
     }
 
     public void removeReview(int reviewId) throws SQLException {
@@ -387,7 +387,7 @@ public class DatabaseHandler {
 
     //Teacher
 
-    public void addTeacher(Teacher teacher, int courseid) throws SQLException {
+    public int addTeacher(Teacher teacher) throws SQLException {
 
         String query = "INSERT INTO teachers(name)" +
                 " VALUES (?)";
@@ -397,15 +397,7 @@ public class DatabaseHandler {
         stmt.executeUpdate();
         ResultSet result = stmt.getGeneratedKeys();
         result.next();
-        int id = result.getInt(1);
-
-
-        String query2 = "INSERT INTO teachesat(courseid, teacherid)" +
-                " VALUES(?,?)";
-        PreparedStatement stmt2 = conn.prepareStatement(query2);
-        stmt2.setInt(1,courseid);
-        stmt2.setInt(2, id);
-        stmt2.executeUpdate();
+        return result.getInt(1);
     }
 
 
@@ -429,12 +421,27 @@ public class DatabaseHandler {
         return teachers;
     }
 
+    public Teacher getTeacherByName(String name) throws SQLException {
+        String query = "" +
+                "SELECT id" +
+                " FROM teachers" +
+                " WHERE name = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, name);
+        ResultSet results = stmt.executeQuery();
+        if(!results.next()){
+            return null;
+        }
+        System.out.println(results.getInt("id"));
+        return new Teacher(results.getInt("id"),name);
+    }
+
     public List<Teacher> getTeachersByStartingString(String startingString) throws SQLException {
         String query = "SELECT id,name FROM teachers" +
                         " WHERE name LIKE ?";
 
         PreparedStatement stmt =  conn.prepareStatement(query);
-        stmt.setString(1, startingString + '%');
+        stmt.setString(1,'%' + startingString + '%');
         ResultSet results = stmt.executeQuery();
 
         List<Teacher> teachers = new ArrayList<Teacher>();
