@@ -25,21 +25,16 @@ import java.sql.SQLException;
         Password*/
 public class AddAccount extends HttpServlet {
 
-    static String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain; charset=UTF-8");
         PrintWriter writer = resp.getWriter();
 
         String name = req.getParameter("name");
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String password = req.getParameter("password");
 
-        if (!ErrorChecker.checkNotNull(new String[]{name, email, password})) {
+        if (!ErrorChecker.checkNotNull(new String[]{name, username, password})) {
             resp.setStatus(400);
             //writer.print(Boolean.toString(req.getParameter("email") == null)+" "+Boolean.toString(req.getParameter("name") == null)+" "+Boolean.toString(req.getParameter("password") == null));
         }
@@ -55,10 +50,6 @@ public class AddAccount extends HttpServlet {
 
 
                 boolean addAccount = true;
-                if (!ErrorChecker.validateEmail(email)) {
-                    addAccount = false;
-                    writer.print("emailaddress-wrong");
-                }
 
                 if(!ErrorChecker.valadiatePassword(password)){
                     addAccount = false;
@@ -66,7 +57,7 @@ public class AddAccount extends HttpServlet {
                 }
 
                 if (addAccount) {
-                    db.addUser(email, name, password);
+                    db.addUser(username, name, password);
                     resp.setStatus(201);
 
                 } else {

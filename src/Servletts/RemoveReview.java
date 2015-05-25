@@ -17,11 +17,11 @@ public class RemoveReview extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginSession = req.getParameter("loginsession");
         String reviewIdString = req.getParameter("reviewId");
 
-        if (!ErrorChecker.checkNotNull(new String[]{reviewIdString, email, loginSession})) {
+        if (!ErrorChecker.checkNotNull(new String[]{reviewIdString, username, loginSession})) {
             resp.setStatus(400);
         } else {
             try {
@@ -30,7 +30,7 @@ public class RemoveReview extends HttpServlet {
 
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
-                if(!db.checkLoginSession(email, loginSession)){
+                if(!db.checkLoginSession(username, loginSession)){
                     resp.setStatus(401);
                 }
                 else {
@@ -38,7 +38,7 @@ public class RemoveReview extends HttpServlet {
                     if(reviewPoster == null){
                         resp.setStatus(400);
                     }
-                    else if(!reviewPoster.equals(email)){
+                    else if(!reviewPoster.equals(username)){
                         resp.setStatus(401);
                     }
                     else {

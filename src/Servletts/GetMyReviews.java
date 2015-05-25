@@ -19,19 +19,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by Fredrik on 2015-03-19.
- */
 public class GetMyReviews extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        String userEmail = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginsession = req.getParameter("loginsession");
 
-        if (!ErrorChecker.checkNotNull(new String[]{userEmail, loginsession})) {
+        if (!ErrorChecker.checkNotNull(new String[]{username, loginsession})) {
             resp.setStatus(400);
         } else {
             PrintWriter writer = resp.getWriter();
@@ -42,12 +39,12 @@ public class GetMyReviews extends HttpServlet {
 
 
 
-                if(!db.checkLoginSession(userEmail,loginsession)) {
+                if(!db.checkLoginSession(username,loginsession)) {
                     resp.setStatus(401);
                 }
                 else {
 
-                    List<Review> reviews = db.getReviewsByUser(userEmail);
+                    List<Review> reviews = db.getReviewsByUser(username);
                     JSONArray reviewsJson = new JSONArray();
                     for (Review review : reviews) {
                         JSONObject reviewJson = new JSONObject(review);

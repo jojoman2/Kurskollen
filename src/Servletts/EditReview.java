@@ -22,7 +22,7 @@ public class EditReview extends HttpServlet {
         resp.setContentType("text/plain; charset=UTF-8");
 
         String reviewIdString = req.getParameter("reviewId");
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginSession = req.getParameter("loginsession");
         String ratingString = req.getParameter("rating");
         String courseIdString = req.getParameter("courseid");
@@ -30,7 +30,7 @@ public class EditReview extends HttpServlet {
         String text = req.getParameter("text");
 
 
-        if (!ErrorChecker.checkNotNull(new String[]{reviewIdString,email,loginSession,ratingString, courseIdString,teacherIdString,text})) {
+        if (!ErrorChecker.checkNotNull(new String[]{reviewIdString,username,loginSession,ratingString, courseIdString,teacherIdString,text})) {
             resp.setStatus(400);
         } else {
 
@@ -39,7 +39,7 @@ public class EditReview extends HttpServlet {
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
 
-                if(!db.checkLoginSession(email, loginSession)){
+                if(!db.checkLoginSession(username, loginSession)){
                     resp.setStatus(401);
                 }
                 else {
@@ -60,11 +60,11 @@ public class EditReview extends HttpServlet {
                         if(reviewPoster == null){
                             resp.setStatus(400);
                         }
-                        else if(!reviewPoster.equals(email)){
+                        else if(!reviewPoster.equals(username)){
                             resp.setStatus(401);
                         }
                         else {
-                            Review review = new Review(System.currentTimeMillis() / 1000, rating, text, email, courseid, teacherid);
+                            Review review = new Review(System.currentTimeMillis() / 1000, rating, text, username, courseid, teacherid);
                             db.editReview(reviewId, review);
                             resp.setStatus(201);
                         }

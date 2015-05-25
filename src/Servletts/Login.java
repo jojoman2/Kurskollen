@@ -23,12 +23,12 @@ public class Login extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
 
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String password = req.getParameter("password");
 
 
         //Check if the login was correct and if so send a loginsession id to the client
-        if (!ErrorChecker.checkNotNull(new String[]{email, password})) {
+        if (!ErrorChecker.checkNotNull(new String[]{username, password})) {
             resp.setStatus(400);
         }
         else {
@@ -36,13 +36,13 @@ public class Login extends HttpServlet {
                 Connection conn  = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
-                boolean checkLogin = db.checkUser(email,password);
+                boolean checkLogin = db.checkUser(username,password);
 
 
                 if (checkLogin){
                     String loginsession = General.randomString(25);
                     writer.print(loginsession);
-                    db.updateLoginSession(email, loginsession);
+                    db.updateLoginSession(username, loginsession);
                 } else{
                     writer.print("wrong-email-or-password");
                     resp.setStatus(401);

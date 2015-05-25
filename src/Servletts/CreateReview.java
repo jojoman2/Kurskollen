@@ -21,7 +21,7 @@ public class CreateReview extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginSession = req.getParameter("loginsession");
         String ratingString = req.getParameter("rating");
         String courseIdString = req.getParameter("courseid");
@@ -29,7 +29,7 @@ public class CreateReview extends HttpServlet {
         String text = req.getParameter("text");
 
 
-        if (!ErrorChecker.checkNotNull(new String[]{email,loginSession,ratingString, courseIdString,teacherIdString,text})) {
+        if (!ErrorChecker.checkNotNull(new String[]{username,loginSession,ratingString, courseIdString,teacherIdString,text})) {
             resp.setStatus(400);
         } else {
 
@@ -38,7 +38,7 @@ public class CreateReview extends HttpServlet {
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
 
 
-                if(!db.checkLoginSession(email, loginSession)){
+                if(!db.checkLoginSession(username, loginSession)){
                     resp.setStatus(401);
                 }
                 else {
@@ -53,7 +53,7 @@ public class CreateReview extends HttpServlet {
                         resp.setStatus(400);
                     }
                     else {
-                        Review review = new Review(System.currentTimeMillis() / 1000, rating, text, email, courseid, teacherid);
+                        Review review = new Review(System.currentTimeMillis() / 1000, rating, text, username, courseid, teacherid);
                         db.addReview(review);
                         resp.setStatus(201);
                     }

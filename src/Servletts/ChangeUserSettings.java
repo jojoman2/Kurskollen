@@ -17,13 +17,13 @@ public class ChangeUserSettings extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginSession = req.getParameter("loginsession");
         String newName = req.getParameter("newName");
         String newPassword = req.getParameter("newPassword");
 
 
-        if (!ErrorChecker.checkNotNull(new String[]{email, loginSession})) {
+        if (!ErrorChecker.checkNotNull(new String[]{username, loginSession})) {
             resp.setStatus(400);
         }
         else {
@@ -35,11 +35,11 @@ public class ChangeUserSettings extends HttpServlet {
 
 
 
-                if (!db.checkLoginSession(email, loginSession)) {
+                if (!db.checkLoginSession(username, loginSession)) {
                     resp.setStatus(401);
                 }
                 else {
-                    db.changeUserDetails(email, newName, newPassword);
+                    db.changeUserDetails(username, newName, newPassword);
                     resp.setStatus(200);
                 }
 

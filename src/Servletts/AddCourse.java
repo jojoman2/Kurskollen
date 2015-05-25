@@ -21,7 +21,7 @@ public class AddCourse extends HttpServlet {
 
         resp.setContentType("application/json; charset=UTF-8");
 
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginsession = req.getParameter("loginsession");
         String creditsString = req.getParameter("credits");
         String schoolIdString = req.getParameter("schoolid");
@@ -31,7 +31,7 @@ public class AddCourse extends HttpServlet {
         String link = req.getParameter("link");
         String onlineString = req.getParameter("online");
 
-        if (!ErrorChecker.checkNotNull(new String[]{email,loginsession,courseCode, name, creditsString, onlineString, schoolIdString })) {
+        if (!ErrorChecker.checkNotNull(new String[]{username,loginsession,courseCode, name, creditsString, onlineString, schoolIdString })) {
             resp.setStatus(400);
         } else {
 
@@ -41,7 +41,7 @@ public class AddCourse extends HttpServlet {
 
 
 
-                if(!db.checkLoginSession(email,loginsession)) {
+                if(!db.checkLoginSession(username,loginsession)) {
                     resp.setStatus(401);
                 }
                 else{

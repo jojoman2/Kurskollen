@@ -25,10 +25,10 @@ public class GetMyBookmarks extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=UTF-8");
 
-        String userEmail = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginsession = req.getParameter("loginsession");
 
-        if (!ErrorChecker.checkNotNull(new String[]{userEmail, loginsession})) {
+        if (!ErrorChecker.checkNotNull(new String[]{username, loginsession})) {
             resp.setStatus(400);
         } else {
             PrintWriter writer = resp.getWriter();
@@ -39,12 +39,12 @@ public class GetMyBookmarks extends HttpServlet {
 
 
 
-                if(!db.checkLoginSession(userEmail,loginsession)) {
+                if(!db.checkLoginSession(username,loginsession)) {
                     resp.setStatus(401);
                 }
                 else {
 
-                    List<Course> courses = db.listBookmarks(userEmail);
+                    List<Course> courses = db.listBookmarks(username);
                     JSONArray coursesJson = new JSONArray();
                     for (Course course : courses) {
                         JSONObject courseJson = new JSONObject(course);

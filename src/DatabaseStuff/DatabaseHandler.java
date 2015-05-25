@@ -20,26 +20,26 @@ public class DatabaseHandler {
 
     //User
 
-    public void addUser(String email, String name, String password) throws SQLException {
+    public void addUser(String username, String name, String password) throws SQLException {
         String hashedPassword = BCrypt.hashpw(password,BCrypt.gensalt());
         String query =
-                "INSERT INTO users(email,name,passwordhash)" +
+                "INSERT INTO users(username,name,passwordhash)" +
                 " VALUES(?,?,?)";
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1,email);
+        stmt.setString(1,username);
         stmt.setString(2,name);
         stmt.setString(3,hashedPassword);
         stmt.executeUpdate();
     }
 
-    public boolean checkUser(String email, String password) throws SQLException {
+    public boolean checkUser(String username, String password) throws SQLException {
         String query =
                 "SELECT passwordhash" +
                 " FROM users" +
-                " WHERE email=?" +
+                " WHERE username=?" +
                 " LIMIT 1";
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1,email);
+        stmt.setString(1,username);
         ResultSet result = stmt.executeQuery();
         if(!result.next()){
             return false;
@@ -48,15 +48,15 @@ public class DatabaseHandler {
         return BCrypt.checkpw(password,hashedPassword);
     }
 
-    public void changeUserDetails(String email, String newName, String newPassword) throws SQLException {
+    public void changeUserDetails(String username, String newName, String newPassword) throws SQLException {
         if(newName!=null) {
             String query =
                     "UPDATE users" +
                     " SET name=?"+
-                    " WHERE email=?";
+                    " WHERE username=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,newName);
-            stmt.setString(2, email);
+            stmt.setString(2, username);
             stmt.executeUpdate();
         }
         if(newPassword!=null){
@@ -64,34 +64,34 @@ public class DatabaseHandler {
             String query =
                     "UPDATE users" +
                     " SET passwordhash=?"+
-                    " WHERE email=?";
+                    " WHERE username=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,passwordHash);
-            stmt.setString(2, email);
+            stmt.setString(2, username);
             stmt.executeUpdate();
         }
     }
 
-    public User getUserInfo(String email) throws SQLException {
+    public User getUserInfo(String username) throws SQLException {
         String query =
                 "SELECT name" +
                 " FROM users"+
-                " WHERE email=?";
+                " WHERE username=?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, email);
+        stmt.setString(1, username);
         ResultSet result = stmt.executeQuery();
         result.next();
-        return new User(result.getString("name"),email);
+        return new User(result.getString("name"),username);
     }
 
     //Checks if user loginsession equals login session
-    public boolean checkLoginSession(String email, String loginSession) throws SQLException {
+    public boolean checkLoginSession(String username, String loginSession) throws SQLException {
         String query =
                 "SELECT loginsession FROM users"+
-                " WHERE email=?";
+                " WHERE username=?";
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, email);
+        stmt.setString(1, username);
 
         ResultSet result =stmt.executeQuery();
         if(!result.next()){
@@ -115,16 +115,16 @@ public class DatabaseHandler {
 
 
     //lägga in loginsessionide
-    public void updateLoginSession(String email, String loginSession) throws SQLException {
+    public void updateLoginSession(String username, String loginSession) throws SQLException {
         String query =
                 "UPDATE users"+
                 " SET loginsession = ?"+
-                " WHERE email = ?";
+                " WHERE username = ?";
 
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, loginSession);
-        stmt.setString(2, email);
+        stmt.setString(2, username);
         stmt.executeUpdate();
 
 
@@ -289,7 +289,7 @@ public class DatabaseHandler {
 
     //Review
     public void addReview(Review review) throws SQLException {
-        String query = "INSERT INTO reviews(rating,time, text, useremail, courseid, teacherid)" +
+        String query = "INSERT INTO reviews(rating,time, text, username, courseid, teacherid)" +
                         " VALUES (?,?,?,?,?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -308,7 +308,7 @@ public class DatabaseHandler {
     public void editReview(int reviewId, Review review) throws SQLException {
         String query = "" +
                 "UPDATE reviews" +
-                " SET rating=?, time=?, text=?, useremail=?, courseid=?, teacherid=?" +
+                " SET rating=?, time=?, text=?, username=?, courseid=?, teacherid=?" +
                 " WHERE id=?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -342,12 +342,12 @@ public class DatabaseHandler {
         return reviews;
     }
 
-    public List<Review> getReviewsByUser(String userEmail) throws SQLException {
+    public List<Review> getReviewsByUser(String username) throws SQLException {
         String query  =  "SELECT * FROM reviews" +
-                        " WHERE useremail = ?";
+                        " WHERE username = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, userEmail);
+        stmt.setString(1, username);
 
         ResultSet results = stmt.executeQuery();
 
@@ -362,7 +362,7 @@ public class DatabaseHandler {
 
     public String getReviewPosterById(int id) throws SQLException {
         String query = "" +
-                "SELECT useremail" +
+                "SELECT username" +
                 " FROM reviews" +
                 " WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(query);

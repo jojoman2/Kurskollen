@@ -26,11 +26,11 @@ public class AddBookmark extends HttpServlet {
         Connection conn;
         PrintWriter writer = resp.getWriter();
 
-        String email = req.getParameter("email");
+        String username = req.getParameter("email");
         String loginSession = req.getParameter("loginsession");
         String courseid = req.getParameter("courseid");
 
-        if (!ErrorChecker.checkNotNull(new String[]{email, loginSession, courseid})) {
+        if (!ErrorChecker.checkNotNull(new String[]{username, loginSession, courseid})) {
             resp.setStatus(400);
         } else {
 
@@ -40,13 +40,13 @@ public class AddBookmark extends HttpServlet {
 
                 conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseStuff.DatabaseHandler(conn);
-                if(!db.checkLoginSession(email, loginSession)){
+                if(!db.checkLoginSession(username, loginSession)){
                     resp.setStatus(401);
                 }
                 else {
                     try {
                         int couseid = Integer.parseInt(courseid);
-                        db.addBookmark(couseid, email);
+                        db.addBookmark(couseid, username);
                         resp.setStatus(201);
                     } catch (NumberFormatException e) {
                         resp.setStatus(400);
