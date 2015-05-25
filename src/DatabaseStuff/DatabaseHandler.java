@@ -358,6 +358,24 @@ public class DatabaseHandler {
 
     }
 
+    public void editReview(int reviewId, Review review) throws SQLException {
+        String query = "" +
+                "UPDATE reviews" +
+                " SET rating=?, time=?, text=?, useremail=?, courseid=?, teacherid=?" +
+                " WHERE id=?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1,review.getRating());
+        stmt.setLong(2, review.getTime());
+        stmt.setString(3, review.getText());
+        stmt.setString(4, review.userEmail());
+        stmt.setInt(5, review.courseid());
+        stmt.setInt(6, review.teacherid());
+        stmt.setInt(7, reviewId);
+
+        stmt.executeUpdate();
+    }
+
 
     //get reviews for a course
     public List<Review> getReviewsByCourse(int courseId) throws SQLException {
@@ -393,6 +411,20 @@ public class DatabaseHandler {
         }
         return reviews;
 
+    }
+
+    public String getReviewPosterById(int id) throws SQLException {
+        String query = "" +
+                "SELECT useremail" +
+                " FROM reviews" +
+                " WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1,id);
+        ResultSet result = stmt.executeQuery();
+        if(!result.next()){
+            return null;
+        }
+        return result.getString("useremail");
     }
 
     public void removeReview(int reviewId) throws SQLException {

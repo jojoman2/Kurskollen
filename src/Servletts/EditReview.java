@@ -15,12 +15,13 @@ import java.sql.SQLException;
 /**
  * Created by Fredrik on 2015-03-19.
  */
-public class CreateReview extends HttpServlet {
+public class EditReview extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json; charset=UTF-8");
+        resp.setContentType("text/plain; charset=UTF-8");
 
+        String reviewIdString = req.getParameter("reviewId");
         String email = req.getParameter("email");
         String loginSession = req.getParameter("loginsession");
         String ratingString = req.getParameter("rating");
@@ -29,7 +30,7 @@ public class CreateReview extends HttpServlet {
         String text = req.getParameter("text");
 
 
-        if (!ErrorChecker.checkNotNull(new String[]{email,loginSession,ratingString, courseIdString,teacherIdString,text})) {
+        if (!ErrorChecker.checkNotNull(new String[]{reviewIdString,email,loginSession,ratingString, courseIdString,teacherIdString,text})) {
             resp.setStatus(400);
         } else {
 
@@ -44,18 +45,29 @@ public class CreateReview extends HttpServlet {
                 else {
 
 
-
+                    int reviewId = Integer.parseInt(reviewIdString);
                     int rating = Integer.parseInt(ratingString);
                     int courseid = Integer.parseInt(courseIdString);
                     int teacherid = Integer.parseInt(teacherIdString);
+
+
 
                     if(rating>5||rating<0){
                         resp.setStatus(400);
                     }
                     else {
-                        Review review = new Review(System.currentTimeMillis() / 1000, rating, text, email, courseid, teacherid);
-                        db.addReview(review);
-                        resp.setStatus(201);
+                        String reviewPoster = db.getReviewPosterById(reviewId);
+                        if(reviewPoster == null){
+                            resp.setStatus(400);
+                        }
+                        else if(!reviewPoster.equals(email)){
+                            resp.setStatus(401);
+                        }
+                        else {
+                            Review review = new Review(System.currentTimeMillis() / 1000, rating, text, email, courseid, teacherid);
+                            db.editReview(reviewId, review);
+                            resp.setStatus(201);
+                        }
                     }
                 }
 

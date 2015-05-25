@@ -74,7 +74,11 @@
         <servlet-name>RemoveReview</servlet-name>
         <servlet-class>Servletts.RemoveReview</servlet-class>
     </servlet>
-
+    
+    <servlet>
+        <servlet-name>EditReview</servlet-name>
+        <servlet-class>Servletts.EditReview</servlet-class>
+    </servlet>
 
 
     
@@ -152,6 +156,11 @@
     <servlet-mapping>
         <servlet-name>RemoveReview</servlet-name>
         <url-pattern>/remove-review</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EditReview</servlet-name>
+        <url-pattern>/edit-review</url-pattern>
     </servlet-mapping>
 
 </web-app>

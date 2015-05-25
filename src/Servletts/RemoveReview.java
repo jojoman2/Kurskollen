@@ -26,23 +26,33 @@ public class RemoveReview extends HttpServlet {
         } else {
             try {
 
+                int reviewId = Integer.parseInt(reviewIdString);
+
                 Connection conn = DatabaseStuff.DbConnect.getConnection();
                 DatabaseStuff.DatabaseHandler db = new DatabaseHandler(conn);
                 if(!db.checkLoginSession(email, loginSession)){
                     resp.setStatus(401);
                 }
                 else {
-                    try {
-                        db.removeReview(Integer.parseInt(reviewIdString));
-                        resp.setStatus(204);
-                    } catch (NumberFormatException e) {
+                    String reviewPoster = db.getReviewPosterById(reviewId);
+                    if(reviewPoster == null){
                         resp.setStatus(400);
+                    }
+                    else if(!reviewPoster.equals(email)){
+                        resp.setStatus(401);
+                    }
+                    else {
+                        db.removeReview(reviewId);
+                        resp.setStatus(204);
                     }
                 }
 
 
             } catch (ClassNotFoundException e) {
                 resp.setStatus(500);
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                resp.setStatus(400);
                 e.printStackTrace();
             } catch (SQLException e) {
                 resp.setStatus(500);
