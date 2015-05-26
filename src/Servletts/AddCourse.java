@@ -1,6 +1,7 @@
 package Servletts;
 
 import Beans.Course;
+import utils.Constants;
 import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
@@ -52,12 +53,16 @@ public class AddCourse extends HttpServlet {
 
                     int schoolid = Integer.parseInt(schoolIdString);
 
+                    if(Constants.schools.get(schoolid) == null){
+                        resp.setStatus(400);
+                    }
+                    else {
 
+                        boolean online = onlineString.equals("1");
 
-                    boolean online = onlineString.equals("1");
-
-                    Course course = new Course(courseCode, name, description, credits, online, link, schoolid);
-                    db.addCourse(course);
+                        Course course = new Course(courseCode, name, description, credits, online, link, schoolid);
+                        db.addCourse(course);
+                    }
                 }
 
 
