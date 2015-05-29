@@ -82,7 +82,9 @@ public class DatabaseHandler {
         stmt.setString(1, username);
         ResultSet result = stmt.executeQuery();
         result.next();
-        return new User(result.getString("name"),username);
+        User theUser = new User(result.getString("name"),username);
+        stmt.close();
+        return theUser;
     }
 
     //Checks if user loginsession equals login session
@@ -100,6 +102,7 @@ public class DatabaseHandler {
 
         String storedLogin = result.getString("loginsession");
 
+        stmt.close();
         //Compares in a way which avoids attacks measuring comparation time
         if(loginSession.length()!=storedLogin.length()){
             return false;
@@ -126,6 +129,7 @@ public class DatabaseHandler {
         stmt.setString(1, loginSession);
         stmt.setString(2, username);
         stmt.executeUpdate();
+        stmt.close();
 
 
     }
@@ -143,8 +147,22 @@ public class DatabaseHandler {
             School review  = new School(results.getString("name"));
             schools.add(review);
         }
+        stmt.close();
         return schools;
+    }
 
+    public boolean schoolExists(int schoolId) throws SQLException {
+        String query =
+                "SELECT COUNT(1)" +
+                " FROM schools" +
+                " WHERE id=?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1,schoolId);
+        ResultSet results = stmt.executeQuery();
+        results.next();
+        int exists = results.getInt(1);
+        stmt.close();
+        return exists == 1;
 
 
     }
@@ -152,8 +170,8 @@ public class DatabaseHandler {
    //Course
 
     public void addCourse(Course course) throws SQLException {
-        String query =  "INSERT INTO courses(coursecode, name, description, credits, online, link, schoolid)" +
-                        " VALUES(?,?,?,?,?,?,?)";
+        String query =  "INSERT INTO courses(coursecode, name, description, credits, online, schoolid)" +
+                        " VALUES(?,?,?,?,?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1,course.getCourseCode());
@@ -161,10 +179,10 @@ public class DatabaseHandler {
         stmt.setString(3, course.getDescription());
         stmt.setFloat(4, course.getCredits());
         stmt.setBoolean(5, course.isOnline());
-        stmt.setString(6, course.getLink());
-        stmt.setInt(7, course.schoolId());
+        stmt.setInt(6, course.schoolId());
 
         stmt.executeUpdate();
+        stmt.close();
     }
 
     public List<Course> searchForCourses(String name, int schoolid, String teacherName, boolean online, int pageNumber) throws SQLException {
@@ -203,7 +221,7 @@ public class DatabaseHandler {
 
         List<Course> courses = new ArrayList<Course>();
         while(results.next()){
-            Course course = new Course(results.getInt("id"),results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
+            Course course = new Course(results.getInt("id"),results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getInt("schoolid"));
             courses.add(course);
         }
         return courses;
@@ -220,7 +238,7 @@ public class DatabaseHandler {
 
         List<Course> courses = new ArrayList<Course>();
         while(results.next()){
-            Course course = new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
+            Course course = new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getInt("schoolid"));
             courses.add(course);
         }
         return courses;
@@ -237,7 +255,7 @@ public class DatabaseHandler {
         ResultSet results = stmt.executeQuery();
         results.next();
 
-        return new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getString("link"), results.getInt("schoolid"));
+        return new Course(results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"), results.getBoolean("online"), results.getInt("schoolid"));
 
     }
 
@@ -267,7 +285,7 @@ public class DatabaseHandler {
 
         List<Course> courses = new ArrayList<Course>();
         while(results.next()){
-            Course course=  new Course(results.getInt("id"),results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"),results.getBoolean("online"), results.getString("link"), results.getInt("schoolId"));
+            Course course=  new Course(results.getInt("id"),results.getString("coursecode"), results.getString("name"), results.getString("description"), results.getFloat("credits"),results.getBoolean("online"), results.getInt("schoolId"));
             courses.add(course);
         }
         return courses;

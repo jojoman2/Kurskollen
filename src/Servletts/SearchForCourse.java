@@ -94,6 +94,7 @@ public class SearchForCourse extends HttpServlet {
                         int teacherId = review.teacherid();
                         Teacher teacher = db.getTeacherById(teacherId);
                         jsonReview.put("teacher", teacher.getName());
+                        jsonReview.put("teacherid",teacher.getId());
 
 
                         reviewsJson.put(jsonReview);

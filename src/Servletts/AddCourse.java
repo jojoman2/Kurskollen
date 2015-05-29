@@ -1,7 +1,6 @@
 package Servletts;
 
 import Beans.Course;
-import utils.Constants;
 import utils.ErrorChecker;
 
 import javax.servlet.ServletException;
@@ -29,7 +28,6 @@ public class AddCourse extends HttpServlet {
         String courseCode = req.getParameter("coursecode");
         String name = req.getParameter("name");
         String description = req.getParameter("description");
-        String link = req.getParameter("link");
         String onlineString = req.getParameter("online");
 
         if (!ErrorChecker.checkNotNull(new String[]{username,loginsession,courseCode, name, creditsString, onlineString, schoolIdString })) {
@@ -49,19 +47,22 @@ public class AddCourse extends HttpServlet {
 
                     float credits = Float.parseFloat(creditsString);
 
-
-
-                    int schoolid = Integer.parseInt(schoolIdString);
-
-                    if(Constants.schools.get(schoolid) == null){
+                    if(credits>90){
                         resp.setStatus(400);
                     }
                     else {
 
-                        boolean online = onlineString.equals("1");
+                        int schoolid = Integer.parseInt(schoolIdString);
 
-                        Course course = new Course(courseCode, name, description, credits, online, link, schoolid);
-                        db.addCourse(course);
+                        if (!db.schoolExists(schoolid)) {
+                            resp.setStatus(400);
+                        } else {
+
+                            boolean online = onlineString.equals("1");
+
+                            Course course = new Course(courseCode, name, description, credits, online, schoolid);
+                            db.addCourse(course);
+                        }
                     }
                 }
 
@@ -71,6 +72,7 @@ public class AddCourse extends HttpServlet {
                 e.printStackTrace();
             } catch (SQLException e) {
                 resp.setStatus(500);
+
                 e.printStackTrace();
             } catch (NumberFormatException e){
                 resp.setStatus(400);

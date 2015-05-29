@@ -11,21 +11,19 @@ public class Course {
     private String description;
     private float credits;
     private boolean online;
-    private String link;
     private int schoolId;
 
-    public Course(String courseCode, String name, String description, float credits, boolean online, String link, int schoolId) {
+    public Course(String courseCode, String name, String description, float credits, boolean online, int schoolId) {
         this.courseCode = courseCode;
         this.name = name;
         this.description = description;
         this.credits = credits;
         this.online = online;
-        this.link = link;
         this.schoolId = schoolId;
     }
 
-    public Course(int courseId,String courseCode, String name, String description, float credits, boolean online, String link, int schoolId){
-        this(courseCode, name, description ,credits ,online, link, schoolId);
+    public Course(int courseId,String courseCode, String name, String description, float credits, boolean online, int schoolId){
+        this(courseCode, name, description ,credits ,online, schoolId);
         this.courseId = courseId;
     }
 
@@ -51,10 +49,6 @@ public class Course {
 
     public boolean isOnline() {
         return online;
-    }
-
-    public String getLink() {
-        return link;
     }
 
     public int schoolId() {
