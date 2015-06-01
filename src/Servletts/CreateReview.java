@@ -69,8 +69,13 @@ public class CreateReview extends HttpServlet {
                 resp.setStatus(500);
                 e.printStackTrace();
             } catch (SQLException e) {
-                e.printStackTrace();
-                resp.setStatus(500);
+                int errorCode = e.getErrorCode();
+                if(errorCode == 1062){
+                    resp.setStatus(409);
+                }
+                else {
+                    resp.setStatus(500);
+                }
             } catch (NumberFormatException e){
                 resp.setStatus(400);
             }
